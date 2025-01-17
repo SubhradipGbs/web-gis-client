@@ -38,31 +38,30 @@ const Login = () => {
     },
   });
   return (
-    <div className="login-container">
-      <video autoPlay loop muted id="background_vid">
-        <source src="/Deocha_Sample_video.mp4" type="video/mp4" />
+    <div className='login-container'>
+      <video autoPlay loop muted id='background_vid'>
+        <source src='/Deocha_Sample_video.mp4' type='video/mp4' />
       </video>
-      <div className="login-box d-flex flex-column justify-content-center align-items-center p-3 rounded">
-        <h1 className="login-heading mb-5">Login</h1>
+      <div className='login-box d-flex flex-column justify-content-center align-items-center p-5 rounded'>
+        <h1 className='login-heading mb-5'>Login</h1>
         <form
-          className="login-form d-flex flex-column"
-          onSubmit={formik.handleSubmit}
-        >
+          className='login-form d-flex flex-column'
+          onSubmit={formik.handleSubmit}>
           <input
-            className="input-field form-control"
-            type="email"
-            placeholder="Email"
+            className='input-field form-control'
+            type='email'
+            placeholder='Email'
             value={formik.values.email}
             onChange={formik.handleChange("email")}
           />
           <input
-            className="input-field form-control"
-            type="password"
-            placeholder="Password"
+            className='input-field form-control'
+            type='password'
+            placeholder='Password'
             value={formik.values.password}
             onChange={formik.handleChange("password")}
           />
-          <button className="login-button btn btn-primary" type="submit">
+          <button className='login-button btn btn-primary' type='submit'>
             Login
           </button>
         </form>

@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { Pagination, Table } from "react-bootstrap";
 import "./landreport.css";
 import DataTable from "../../../Components/DataTable/DataTable";
+import axios from "axios";
+
+// const DataTable = lazy(() => import("../../../Components/DataTable/DataTable"));
 
 const columns = [
   {
@@ -96,13 +99,11 @@ const LandReport = () => {
   const { data: lands, isLoading } = useQuery({
     queryKey: ["landRecords"],
     queryFn: async () => {
-      const response = await fetch("http://localhost:3000/land-all");
-      return response.json();
+      const response = await axios.get("http://localhost:3000/land-all");
+      return response.data;
     },
     select: (data) => data.data,
   });
-
-  console.log(lands);
 
   let active = 1;
   let items = [];
@@ -113,67 +114,32 @@ const LandReport = () => {
       </Pagination.Item>
     );
   }
-  const [renderedItems, setRenderedItems] = useState([]);
-  const [index, setIndex] = useState(0);
 
-  useEffect(() => {
-    if (lands && index < lands.length) {
-      const timer = setTimeout(() => {
-        setRenderedItems((prev) => [
-          ...prev,
-          ...lands.slice(index, index + 50),
-        ]);
-        setIndex(index + 50);
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [index, lands]);
+  // useEffect(() => {
+  //   if (lands && index < lands.length) {
+  //     const timer = setTimeout(() => {
+  //       setRenderedItems((prev) => [
+  //         ...prev,
+  //         ...lands.slice(index, index + 50),
+  //       ]);
+  //       setIndex(index + 50);
+  //     }, 100);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [index, lands]);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
+    <div
+      style={{
+        width: "100%",
+      }}>
       <h5>Land Records</h5>
-      {/* <Table striped bordered hover size="sm" responsive="lg">
-        <thead className="table-active w-100">
-          <tr>
-            <th className="coulmn-header">Sl No.</th>
-            <th className="coulmn-header">Plot Id</th>
-            <th className="coulmn-header">Mouza</th>
-            <th className="coulmn-header">Category</th>
-            <th className="coulmn-header">Lr Plot No.</th>
-            <th className="coulmn-header">Rs Plot No.</th>
-            <th className="coulmn-header">Total area in acres</th>
-            <th className="coulmn-header">Classification</th>
-            <th className="coulmn-header">Present Use</th>
-            <th className="coulmn-header">Owner Name/Raiayat</th>
-            <th className="coulmn-header">Lr Khatian No.</th>
-            <th className="coulmn-header">Owner Address/Raiayat</th>
-          </tr>
-        </thead>
-        <tbody>
-          {renderedItems.map((land, index) => (
-            <tr key={land.objectId}>
-              <td className="data-cell text-sm p-1">{index + 1}</td>
-              <td className="data-cell text-sm p-1">{land.plot_id}</td>
-              <td className="data-cell text-sm p-1">{land.mouza_name}</td>
-              <td className="data-cell text-sm p-1">{land.category}</td>
-              <td className="data-cell text-sm p-1">{land.lr_plot_no}</td>
-              <td className="data-cell text-sm p-1">{land.rs_plot_no}</td>
-              <td className="data-cell text-sm p-1">{land.total_area_in_acres}</td>
-              <td className="data-cell text-sm p-1">{land.classification}</td>
-              <td className="data-cell text-sm p-1">{land.present_use}</td>
-              <td className="data-cell text-sm p-1">{land.owner_name_or_raiayat}</td>
-              <td className="data-cell text-sm p-1">{land.lr_khatian_no}</td>
-              <td className="data-cell text-sm p-1">{land.owner_address_or_raiayat}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table> */}
-      <div>
-        <DataTable data={renderedItems} columns={columns} />
+      <div style={{ width: "100%" }}>
+        <DataTable data={lands} columns={columns} />
       </div>
     </div>
   );

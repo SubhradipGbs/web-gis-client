@@ -1,4 +1,4 @@
-.main-container{
+.main-container {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -7,9 +7,7 @@
     transition: all 0.3s;
 }
 
-.content{
-    display: flex;
-    flex: 1;
+.content {
     height: 100%;
     width: 100%;
     overflow: hidden;

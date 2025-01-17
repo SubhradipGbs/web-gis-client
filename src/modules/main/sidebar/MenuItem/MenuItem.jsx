@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
-import './menu.css';
+import "./menu.css";
 // import { mapIconToComponent } from "../../utils/Icons";
 
 // const IconComponentLoader = ({ iconName }) => {
@@ -52,15 +52,14 @@ const MenuItem = ({ item }) => {
     <li style={{ marginBottom: "10px" }}>
       <div
         className={`custom-nav-item ${
-          isMainActive || isOneOfChildrenActive ? "bg-primary active" : ""
+          isMainActive || isOneOfChildrenActive ? "active" : ""
         }`}
         onClick={() => {
           handleMenuClick();
-        }}
-      >
-        <div className="d-flex align-items-center">
-          <span className="nav-icons">{item.icon}</span>
-          <span className="nav-title">{item.name}</span>
+        }}>
+        <div className='d-flex align-items-center'>
+          <span className='nav-icons'>{item.icon}</span>
+          <span className='nav-title'>{item.name}</span>
         </div>
         {item.child && item.child.length > 0 && (
           <span>
@@ -70,15 +69,16 @@ const MenuItem = ({ item }) => {
       </div>
       {!!expanded && item.child && !!item.child.length > 0 && (
         <div className={`custom-child-nav ${expanded ? "expanded" : ""}`}>
-          <ul className="child-nav-lists mt-1">
+          <ul className='child-nav-lists mt-1'>
             {item.child.map((ch) => (
               <li
                 key={ch.id}
-                className={`child-nav-items ${location.pathname.startsWith(ch.path) ? "text-primary" : ""}`}
+                className={`child-nav-items ${
+                  location.pathname.startsWith(ch.path) ? "active" : ""
+                }`}
                 onClick={() => {
                   handleClick(ch.path);
-                }}
-              >
+                }}>
                 {ch.name}
               </li>
             ))}
