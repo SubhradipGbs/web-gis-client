@@ -1,11 +1,33 @@
-import React from 'react'
+import React, { useState } from "react";
+import MapWrapper from '../../Components/MapWrapper';
+import { Offcanvas } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDrawer } from "../../store/reducers/ui";
 
 const Dashboard = () => {
+  const {drawerOpen}= useSelector((state)=>state.ui);
+  const dispatch = useDispatch();
+
   return (
-    <div style={{height:'1000px'}}>
-      <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam odit ab ut dicta repellendus saepe assumenda quidem perspiciatis nisi tenetur hic dolore nulla, laborum velit reprehenderit cupiditate cumque dolorum aliquid?</h3>
+    <div className="w-100 h-100">
+      <Offcanvas
+        show={drawerOpen}
+        onHide={() => {
+          dispatch(toggleDrawer());
+        }}
+        placement="end"
+        style={{ width: "200px" }}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Tools</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body></Offcanvas.Body>
+      </Offcanvas>
+      <div className="w-100 h-100">
+        <MapWrapper/>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Dashboard;

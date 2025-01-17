@@ -52,7 +52,7 @@ export const demoMenu = [
       },
       {
         id: 2,
-        name: "Land Reports",
+        name: "Land Records",
         path: "/reports/land",
       },
     ],

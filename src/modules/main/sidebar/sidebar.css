@@ -1,12 +1,17 @@
 .sidebar {
-  width: 250px;
+  width: 200px;
   height: 100%;
   background-color: #fff;
   z-index: 100;
+  overflow-x: hidden;
+  transition: width 0.3s;
   display: flex;
   flex-direction: column;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s;
+}
+
+.sidebar.collapsed {
+  width: 0px;
 }
 
 .sidebar-menu {
@@ -15,6 +20,7 @@
   margin: 0;
   width: 100%;
 }
+
 .menu-item {
   display: flex;
   gap: 10px;
@@ -36,5 +42,5 @@
 .sidebar-head {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }

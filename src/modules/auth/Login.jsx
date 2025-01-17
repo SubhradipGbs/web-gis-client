@@ -3,23 +3,24 @@ import "./Login.css";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../store/reducers/auth";
-import { demoUsers } from "../../utils/constants";
-import { addReport } from "../../store/reducers/report";
+import axios from "axios";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const login = (username, password) => {
-    const user = demoUsers.find(
-      (user) => user.username === username && user.password === password
-    );
-    if (user) {
-      console.log("Login successful");
-      const rportItem = {
-        userId: user.id,
-        username: user.username,
-        type: "login",
-        timestamp: new Date().toISOString(),
-      };
+  const login = async (email, password) => {
+    const response = await axios.post("http://localhost:3000/auth/login", {
+      email,
+      password,
+    });
+
+    if (response.status === 200) {
+      const user = response.data.data;
+      // const rportItem = {
+      //   userId: user.id,
+      //   username: user.username,
+      //   type: "login",
+      //   timestamp: new Date().toISOString(),
+      // };
       dispatch(userLogin(user));
     } else {
       console.log("Login failed");
@@ -28,17 +29,20 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
     onSubmit: (values) => {
       console.log(values);
-      login(values.username, values.password);
+      login(values.email, values.password);
     },
   });
   return (
     <div className="login-container">
-      <div className="login-box bg-light d-flex flex-column justify-content-center align-items-center p-5 shadow rounded">
+      <video autoPlay loop muted id="background_vid">
+        <source src="/Deocha_Sample_video.mp4" type="video/mp4" />
+      </video>
+      <div className="login-box d-flex flex-column justify-content-center align-items-center p-3 rounded">
         <h1 className="login-heading mb-5">Login</h1>
         <form
           className="login-form d-flex flex-column"
@@ -46,10 +50,10 @@ const Login = () => {
         >
           <input
             className="input-field form-control"
-            type="text"
-            placeholder="Username"
-            value={formik.values.username}
-            onChange={formik.handleChange("username")}
+            type="email"
+            placeholder="Email"
+            value={formik.values.email}
+            onChange={formik.handleChange("email")}
           />
           <input
             className="input-field form-control"
