@@ -83,12 +83,11 @@
   padding: 20px 50px;
 }
 
-.login-form1 form{
+.login-form1 form {
   width: 100%;
 }
 
-.logo {
-}
+.logo {}
 
 .logo-img {
   width: 80px;
@@ -121,9 +120,7 @@
   transition: border-color 0.3s ease;
 }
 
-.input-group input:focus {
-  
-}
+.input-group input:focus {}
 
 .error {
   color: #e53e3e;
@@ -132,7 +129,16 @@
 }
 
 .login-btn {
-  
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
 }
 
 .login-btn:hover {
