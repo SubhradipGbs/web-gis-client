@@ -20,7 +20,7 @@ const Main = () => {
         <Sidebar isCollapsed={isCollapsed} />
         <div className='main-container flex-grow-1'>
           <Header toggleSidebar={toggleSidebar} />
-          <div className='content px-4 py-2'>
+          <div className='content px-2 py-2'>
             <Outlet />
           </div>
         </div>

@@ -11,12 +11,12 @@
 }
 
 .custom-nav-item:not(.active):hover {
-  color: #125590;
+  color: #001f3d;
   font-weight: 600;
 }
 
 .custom-nav-item:where(.active) {
-  background: #125590;
+  background: #001f3d;
   color: #fffafa;
 }
 
@@ -65,12 +65,12 @@
 
 .child-nav-items > a {
   text-decoration: none;
-  color: #125590;
+  color: #001f3d;
 }
 
 .child-nav-items > a:hover {
   text-decoration: none;
-  color: #125590;
+  color: #001f3d;
 }
 
 .child-nav-items:first-child {
@@ -78,10 +78,10 @@
 }
 
 .child-nav-items:where(.active) {
-  color: #125590;
+  color: #001f3d;
 }
 .child-nav-items:hover {
-  color: #125590;
+  color: #001f3d;
 }
 
 .arrow {

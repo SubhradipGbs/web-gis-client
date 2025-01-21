@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
@@ -6,13 +6,17 @@ import { userLogin } from "../../store/reducers/auth";
 import axios from "axios";
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const dispatch = useDispatch();
   const login = async (email, password) => {
+    setIsLoading(true);
     const response = await axios.post("http://localhost:3000/auth/login", {
       email,
       password,
     });
-
+    setIsLoading(false);
     if (response.status === 200) {
       const user = response.data.data;
       // const rportItem = {
@@ -23,6 +27,8 @@ const Login = () => {
       // };
       dispatch(userLogin(user));
     } else {
+      setIsLoading(false);
+      setErrorMessage("Invalid username or password");
       console.log("Login failed");
     }
   };
@@ -37,35 +43,77 @@ const Login = () => {
       login(values.email, values.password);
     },
   });
+
   return (
-    <div className='login-container'>
-      <video autoPlay loop muted id='background_vid'>
-        <source src='/Deocha_Sample_video.mp4' type='video/mp4' />
-      </video>
-      <div className='login-box d-flex flex-column justify-content-center align-items-center p-5 rounded'>
-        <h1 className='login-heading mb-5'>Login</h1>
-        <form
-          className='login-form d-flex flex-column'
-          onSubmit={formik.handleSubmit}>
-          <input
-            className='input-field form-control'
-            type='email'
-            placeholder='Email'
-            value={formik.values.email}
-            onChange={formik.handleChange("email")}
-          />
-          <input
-            className='input-field form-control'
-            type='password'
-            placeholder='Password'
-            value={formik.values.password}
-            onChange={formik.handleChange("password")}
-          />
-          <button className='login-button btn btn-primary' type='submit'>
-            Login
-          </button>
-        </form>
+    <div className="login-container">
+      <header className="login-header">
+        <h1 className="header-title">
+          Deucha Land Information Management System
+        </h1>
+      </header>
+      <div className="form-conteiner">
+        <div className="login-form1">
+          <div className="logo">
+            <img
+              src="/logo.png"
+              alt="WB Government Logo"
+              className="logo-img"
+            />
+          </div>
+
+          <h2 className="login-title">Deucha Portal</h2>
+          <form onSubmit={formik.handleSubmit}>
+            <div className="input-grp">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Enter email"
+                value={formik.values.email}
+                onChange={formik.handleChange("email")}
+                required
+              />
+            </div>
+            <div className="input-grp">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                value={formik.values.password}
+                onChange={formik.handleChange("password")}
+                required
+              />
+            </div>
+            {errorMessage && <p className="error">{errorMessage}</p>}
+
+            <button type="submit" className="login-btn" disabled={isLoading}>
+              {isLoading ? "Loading..." : "Login"}
+            </button>
+          </form>
+          {isLoading && <div className="loader">Loading...</div>}
+        </div>
       </div>
+
+      <footer className="login-footer">
+        <div className="footer-content">
+          <div className="footer-logo">
+            <img
+              src="/mainfooterbg.png"
+              alt="WB Government Footer Logo"
+              className="footer-img"
+            />
+          </div>
+          <div className="footer-text">
+            <p>&copy; 2025 West Bengal Government. All rights reserved.</p>
+            <p>
+              <a href="/privacy-policy">Privacy Policy</a> |{" "}
+              <a href="/terms-of-service">Terms of Service</a> |{" "}
+              <a href="/contact">Contact Us</a>
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

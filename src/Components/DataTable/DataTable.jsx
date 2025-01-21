@@ -6,10 +6,11 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useState } from "react";
-import { Form, InputGroup, Table } from "react-bootstrap";
+import React, { useMemo, useState } from "react";
+import { Table } from "react-bootstrap";
 import "./datatable.css";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
+import { FaSort, FaSortDown, FaSortUp } from "react-icons/fa";
 
 const DataTable = ({ data, columns }) => {
   const [pagination, setPagination] = useState({
@@ -17,8 +18,7 @@ const DataTable = ({ data, columns }) => {
     pageSize: 25,
   });
   const [globalFilter, setGlobalFilter] = useState("");
-
-  console.log(data);
+  const [columnfilterd, setColumnFiltered] = useState([]);
 
   // const memoizedData = React.useMemo(() => data, [data]);
   // const memoizedColumns = React.useMemo(() => columns, [columns]);
@@ -34,37 +34,67 @@ const DataTable = ({ data, columns }) => {
     onPaginationChange: setPagination,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: "includesString",
+    onColumnFiltersChange: setColumnFiltered,
     state: {
       pagination,
       globalFilter,
+      columnFilters: columnfilterd,
     },
     initialState: {
       pagination,
       globalFilter,
+      columnFilters: columns
+        .filter((col) => col.initialFilterValue)
+        .map((col) => ({ id: col.accessor, value: col.initialFilterValue })),
     },
   });
 
+  const debounce = (func, delay) => {
+    let debounceTimer;
+    return function (...args) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
+
+  const handleSearchChange = debounce((value) => {
+    setGlobalFilter(value);
+  }, 300);
+
   return (
-    <div className='data-table'>
-      <div className='d-flex justify-content-between align-items-center'>
-        <div className='search-box'>
+    <div className="data-table">
+      <div className="w-100 d-flex gap-3 align-items-center my-2">
+        {table
+          .getHeaderGroups()
+          .map((headergrp) =>
+            headergrp.headers.map(
+              (header) =>
+                header.column.getCanFilter() && (
+                  <Filter column={header.column} key={header.id} />
+                )
+            )
+          )}
+      </div>
+
+      <div className="d-flex justify-content-between align-items-center">
+        <div className="search-box">
           <input
-            className='search-input'
-            placeholder='Search...'
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
+            className="search-input"
+            placeholder="Search..."
+            onChange={(e) => handleSearchChange(e.target.value)}
           />
-          <HiMiniMagnifyingGlass className='search-icon' />
+          <HiMiniMagnifyingGlass className="search-icon" />
         </div>
         {table.getCoreRowModel().rows.length > 0 && (
-          <div className='pagination my-2'>
+          <div className="pagination my-2">
             <div style={{ width: "100px" }}>
               <select
-                className='form-select select-sm'
+                className="form-select select-sm"
                 value={table.getState().pagination.pageSize}
                 onChange={(e) => {
                   table.setPageSize(Number(e.target.value));
-                }}>
+                }}
+              >
                 {[25, 50, 100, 200].map((pageSize) => (
                   <option key={pageSize} value={pageSize}>
                     {pageSize}
@@ -72,59 +102,82 @@ const DataTable = ({ data, columns }) => {
                 ))}
               </select>
             </div>
-            <div className='d-none d-md-block'>Page: </div>
+            <div className="d-none d-md-block">Page: </div>
             <strong>
               {table.getState().pagination.pageIndex + 1}/{" "}
               {table.getPageCount().toLocaleString()}
             </strong>
             <button
-              className='page-button'
+              className="page-button"
               onClick={() => {
                 table.firstPage();
               }}
-              disabled={!table.getCanPreviousPage()}>
+              disabled={!table.getCanPreviousPage()}
+            >
               First
             </button>
             <button
-              className='page-button'
+              className="page-button"
               disabled={!table.getCanPreviousPage()}
               onClick={() => {
                 table.previousPage();
-              }}>
+              }}
+            >
               Prev
             </button>
-            <button className='btn btn-sm'>
+            <button className="btn btn-sm">
               {table.getState().pagination.pageIndex + 1}
             </button>
             <button
-              className='page-button'
+              className="page-button"
               disabled={!table.getCanNextPage()}
               onClick={() => {
                 table.nextPage();
-              }}>
+              }}
+            >
               Next
             </button>
             <button
-              className='page-button'
+              className="page-button"
               disabled={!table.getCanNextPage()}
               onClick={() => {
                 table.lastPage();
-              }}>
+              }}
+            >
               Last
             </button>
           </div>
         )}
       </div>
-      <Table responsive bordered size='sm' style={{ fontSize: "0.85rem" }}>
-        <thead className='table-active'>
+
+      <Table responsive bordered size="sm" style={{ fontSize: "0.85rem" }}>
+        <thead className="table-active">
           {table.getHeaderGroups().map((headergrp) => (
             <tr key={headergrp.id}>
               {headergrp.headers.map((header) => (
                 <th
                   key={header.id}
-                  style={{ verticalAlign: "middle" }}
-                  className='px-2'>
-                  {header.column.columnDef.header}
+                  style={{
+                    verticalAlign: "middle",
+                    whiteSpace: "nowrap",
+                    cursor: "pointer",
+                  }}
+                  className="px-2 cursor-pointer"
+                  onClick={header.column.getToggleSortingHandler()}
+                >
+                  <span className="d-flex justify-content-between align-items-center">
+                    <span>{header.column.columnDef.header}</span>
+                    {header.column.getCanSort() &&
+                      !header.column.getIsSorted() && (
+                        <FaSort size={12} opacity={0.7} />
+                      )}
+                    {header.column.getIsSorted() == "asc" && (
+                      <FaSortUp size={12} opacity={0.7} />
+                    )}
+                    {header.column.getIsSorted() == "desc" && (
+                      <FaSortDown size={12} opacity={0.7} />
+                    )}
+                  </span>
                 </th>
               ))}
             </tr>
@@ -140,17 +193,23 @@ const DataTable = ({ data, columns }) => {
               ))}
             </tr>
           ))}
+          {!data.length && (
+            <tr>
+              <td colSpan={columns.length}>No records found</td>
+            </tr>
+          )}
         </tbody>
       </Table>
       {table.getCoreRowModel().rows.length > 0 && (
-        <div className='pagination my-2'>
+        <div className="pagination my-2">
           <div style={{ width: "100px" }}>
             <select
-              className='form-select select-sm'
+              className="form-select select-sm"
               value={table.getState().pagination.pageSize}
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
-              }}>
+              }}
+            >
               {[25, 50, 100, 200].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   {pageSize}
@@ -158,46 +217,50 @@ const DataTable = ({ data, columns }) => {
               ))}
             </select>
           </div>
-          <div className='d-none d-md-block'>Page: </div>
+          <div className="d-none d-md-block">Page: </div>
           <strong>
             {table.getState().pagination.pageIndex + 1}/{" "}
             {table.getPageCount().toLocaleString()}
           </strong>
           <button
-            className='page-button'
+            className="page-button"
             onClick={() => {
               table.firstPage();
             }}
-            disabled={!table.getCanPreviousPage()}>
+            disabled={!table.getCanPreviousPage()}
+          >
             First
           </button>
           <button
-            className='page-button'
+            className="page-button"
             disabled={!table.getCanPreviousPage()}
             onClick={() => {
               table.previousPage();
-            }}>
+            }}
+          >
             Prev
           </button>
-          <button className='btn btn-sm'>
+          <button className="btn btn-sm">
             {table.getState().pagination.pageIndex + 1}
           </button>
           <button
-            className='page-button'
+            className="page-button"
             disabled={!table.getCanNextPage()}
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
               table.nextPage();
-            }}>
+            }}
+          >
             Next
           </button>
           <button
-            className='page-button'
+            className="page-button"
             disabled={!table.getCanNextPage()}
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
               table.lastPage();
-            }}>
+            }}
+          >
             Last
           </button>
         </div>
@@ -217,3 +280,30 @@ function flexRender(Component, props) {
 }
 
 export default DataTable;
+
+const Filter = ({ column }) => {
+  const columnFilterValue = column.getFilterValue();
+  const sortedUniqueValues = useMemo(
+    () =>
+      Array.from(column.getFacetedUniqueValues().keys()).sort().slice(0, 5000),
+    [column.getFacetedUniqueValues()]
+  );
+  console.log(column?.columnDef.header);
+  return (
+    <div>
+      <label className="fw-bold mb-1 ms-1">{column?.columnDef?.header}:</label>
+      <select
+        className="form-select form-select-sm"
+        onChange={(e) => column.setFilterValue(e.target.value)}
+        value={columnFilterValue?.toString()}
+      >
+        <option value="">All</option>
+        {sortedUniqueValues.map((value) => (
+          <option value={value} key={value}>
+            {value}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};

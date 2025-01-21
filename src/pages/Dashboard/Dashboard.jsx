@@ -3,6 +3,7 @@ import MapWrapper from '../../Components/MapWrapper';
 import { Offcanvas } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDrawer } from "../../store/reducers/ui";
+import MapViewer from "../../Components/MapVewer/MapViewer";
 
 const Dashboard = () => {
   const {drawerOpen}= useSelector((state)=>state.ui);
@@ -24,7 +25,8 @@ const Dashboard = () => {
         <Offcanvas.Body></Offcanvas.Body>
       </Offcanvas>
       <div className="w-100 h-100">
-        <MapWrapper/>
+        <MapViewer/>
+        {/* <h1>Hello World</h1> */}
       </div>
     </div>
   );

@@ -9,9 +9,9 @@ const MapHeader = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="header-container d-flex align-items-center justify-content-end" >
+    <div className="header-container d-flex align-items-center justify-content-end mx-2" >
       <div>
-        <button className="btn" onClick={()=>{dispatch(toggleDrawer())}}>
+        <button className="btn text-light" onClick={()=>{dispatch(toggleDrawer())}}>
           <FaTools />
         </button>
       </div>
