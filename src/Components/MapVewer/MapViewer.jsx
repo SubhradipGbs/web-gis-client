@@ -474,15 +474,12 @@ const MapView = () => {
   };
 
   return (
-    <div className="w-100 h-100">
-      <div
-        ref={mapElement}
-        className="h-100 w-100"
-      />
+    <div className='w-100 h-100'>
+      <div ref={mapElement} className='h-100 w-100' />
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        contentLabel="Plot Information"
+        contentLabel='Plot Information'
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -504,29 +501,27 @@ const MapView = () => {
             maxWidth: "900px",
             width: "90%",
           },
-        }}
-      >
-        <div className="modal-header">
-          <div className="modal-header-icon">
+        }}>
+        <div className='modal-header'>
+          <div className='modal-header-icon'>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              xmlns='http://www.w3.org/2000/svg'
+              width='24'
+              height='24'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+              stroke-linecap='round'
+              stroke-linejoin='round'>
+              <circle cx='12' cy='12' r='10'></circle>
+              <line x1='12' y1='16' x2='12' y2='12'></line>
+              <line x1='12' y1='8' x2='12.01' y2='8'></line>
             </svg>
           </div>
           <div>
-            <h2 className="modal-title">Plot Information</h2>
-            <p className="modal-subtitle">
+            <h2 className='modal-title'>Plot Information</h2>
+            <p className='modal-subtitle'>
               View and navigate through the plot records
             </p>
           </div>
@@ -534,34 +529,32 @@ const MapView = () => {
 
         {featuresData.length > 0 ? (
           <>
-            <div className="feature-records-nav">
-              <span className="feature-records-count">
+            <div className='feature-records-nav'>
+              <span className='feature-records-count'>
                 Record {selectedFeatureIndex + 1} of {featuresData.length}
               </span>
               <button
-                className="pagination-button"
+                className='pagination-button'
                 onClick={() =>
                   setSelectedFeatureIndex((prev) => Math.max(0, prev - 1))
                 }
-                disabled={selectedFeatureIndex === 0}
-              >
+                disabled={selectedFeatureIndex === 0}>
                 Previous
               </button>
               <button
-                className="pagination-button"
+                className='pagination-button'
                 onClick={() =>
                   setSelectedFeatureIndex((prev) =>
                     Math.min(featuresData.length - 1, prev + 1)
                   )
                 }
-                disabled={selectedFeatureIndex === featuresData.length - 1}
-              >
+                disabled={selectedFeatureIndex === featuresData.length - 1}>
                 Next
               </button>
             </div>
 
             <div style={{ overflowX: "auto" }}>
-              <table className="records-table">
+              <table className='records-table'>
                 <thead>
                   <tr>
                     <th>Field</th>
@@ -587,7 +580,7 @@ const MapView = () => {
           <p>No data available for this location.</p>
         )}
 
-        <button className="close-button" onClick={closeModal}>
+        <button className='close-button' onClick={closeModal}>
           Close
         </button>
       </Modal>

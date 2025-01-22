@@ -63,12 +63,12 @@
   cursor: pointer;
 }
 
-.child-nav-items > a {
+.child-nav-items>a {
   text-decoration: none;
   color: #001f3d;
 }
 
-.child-nav-items > a:hover {
+.child-nav-items>a:hover {
   text-decoration: none;
   color: #001f3d;
 }
@@ -78,10 +78,11 @@
 }
 
 .child-nav-items:where(.active) {
-  color: #001f3d;
+  color: #125590;
 }
+
 .child-nav-items:hover {
-  color: #001f3d;
+  color: #125590;
 }
 
 .arrow {
@@ -92,6 +93,7 @@
 .arrow.open {
   transform: rotate(0deg);
 }
+
 /* 
   .collapsed {
     width: 4.5rem;

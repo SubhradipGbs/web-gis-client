@@ -46,7 +46,7 @@
 .login-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100vw;
   height: 100vh;
@@ -80,7 +80,7 @@
   flex-direction: column;
   align-items: center;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-  padding: 20px 50px;
+  padding: 40px 50px;
 }
 
 .login-form1 form {
@@ -90,12 +90,12 @@
 .logo {}
 
 .logo-img {
-  width: 80px;
-  height: 80px;
+  width: 90px;
+  height: 90px;
 }
 
 .login-title {
-  font-size: 0.95rem;
+  font-size: 1.2rem;
 }
 
 .input-grp {
@@ -130,8 +130,8 @@
 
 .login-btn {
   width: 100%;
-  padding: 12px;
-  font-size: 1rem;
+  padding: 10px;
+  font-size: 0.85rem;
   background-color: #3b82f6;
   color: white;
   border: none;
