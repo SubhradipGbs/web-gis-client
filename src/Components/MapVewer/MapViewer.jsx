@@ -11,6 +11,7 @@ import {
   OverviewMap,
   Control,
   MousePosition,
+  FullScreen,
 } from "ol/control";
 import LayerSwitcher from "ol-layerswitcher";
 import { defaults as defaultControls } from "ol/control";
@@ -63,6 +64,7 @@ const MapView = () => {
   const [isFeatureInfoActive, setIsFeatureInfoActive] = useState(false);
   const mapRef = useRef(null);
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(0);
+  const [currentFeatureLayer, setCurrentFeatureLayer] = useState("");
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -99,8 +101,8 @@ const MapView = () => {
             .ol-mouse-position {
                 top: auto;
                 bottom: 8px;
-                left: 8px;
-                right: auto;
+                left: auto;
+                right: 8px;
                 background: rgba(255,255,255,0.8);
                 padding: 5px 10px;
                 border-radius: 4px;
@@ -146,6 +148,29 @@ const MapView = () => {
 
             .ol-layerswitcher.ol-collapsed > button {
                 margin: 0 !important;
+            }
+
+            .layer-panel {
+                width: 250px;
+                background-color: #f8f9fa;
+                padding: 1rem;
+                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+                overflow-y: auto;
+            }
+
+            .layer-title {
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+            }
+
+            .layer-item {
+                display: flex;
+                align-items: center;
+                margin: 0.5rem 0;
+            }
+
+            .layer-checkbox {
+                margin-right: 0.5rem;
             }
 
             .feature-info-button {
@@ -278,6 +303,16 @@ const MapView = () => {
             button.close-button:hover {
                 background-color: #2563eb;
             }
+                .map:-webkit-full-screen {
+                height: 100%;
+                margin: 0;
+            }
+            .map:fullscreen {
+                height: 100%;
+            }
+            .map .ol-rotate {
+                top: 3em;
+            }
         `;
     document.head.appendChild(style);
 
@@ -354,6 +389,46 @@ const MapView = () => {
       ],
     });
 
+    const balsalt_l = new TileLayer({
+      title: "Basalt-326.76 Acres",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:basalt_l",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const coalLayer = new TileLayer({
+      title: "Coal Blocks",
+      name: "WBPDCL:vw_land_records",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:COAL_BLOCK_BOUNDARY",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      crossOrigin: "anonymous",
+      opacity: 1,
+      visible: true,
+    });
+
+    const BasaltGroup = new Group({
+      title: "Boundary",
+      layers: [
+        balsalt_l,
+        coalLayer,
+        // balsalt_m,
+        // balsalt_s
+      ],
+    });
+
     const wmsLayer = new TileLayer({
       title: "Land Records (WMS)",
       name: "WBPDCL:vw_land_records",
@@ -367,7 +442,134 @@ const MapView = () => {
       }),
       crossOrigin: "anonymous",
       opacity: 1,
+      visible: false,
+    });
+
+    const mouzaWMS = new TileLayer({
+      title: "Mouza Boundary",
+      name: "WBPDCL:vw_land_records",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:mouzaboundary",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      crossOrigin: "anonymous",
+      opacity: 1,
       visible: true,
+    });
+
+    const vestedLand = new TileLayer({
+      title: "Vested Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_vested_land",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const rayatiLand = new TileLayer({
+      title: "Rayati Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_rayati_land",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const forestLand = new TileLayer({
+      title: "Forest Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_forest_land",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const otherLand = new TileLayer({
+      title: "Others Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_others_land",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const partlypurchasedLand = new TileLayer({
+      title: "Partly Purchased Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:partly_purchased_plots",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const fullypurchasedLand = new TileLayer({
+      title: "Fully Purchased Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:fully_purchased_plots",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const notapprove = new TileLayer({
+      title: "Cabinate Approved but Not Purchased",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_purchase_ntapprove",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const landGroup = new Group({
+      title: "Land Categories",
+      layers: [
+        notapprove,
+        fullypurchasedLand,
+        partlypurchasedLand,
+        vestedLand,
+        rayatiLand,
+        forestLand,
+        otherLand,
+      ],
     });
 
     const mousePositionControl = new MousePosition({
@@ -379,19 +581,21 @@ const MapView = () => {
 
     const map = new Map({
       target: mapElement.current,
-      layers: [basemapGroup, wmsLayer],
+      layers: [basemapGroup, mouzaWMS, wmsLayer, BasaltGroup, landGroup],
       view: new View({
         center: fromLonLat([87.602577, 24.057537]),
-        zoom: 12,
+        zoom: 14,
+        constrainRotation: true,
       }),
       controls: defaultControls().extend([
         new ScaleLine({ bar: true, text: true, minWidth: 125 }),
         new Zoom(),
         new ZoomSlider(),
         new OverviewMap(),
+        new FullScreen(),
         new LayerSwitcher({
           startActive: true,
-          groupSelectStyle: "group",
+          groupSelectStyle: "children",
           reverse: true,
           activationMode: "click",
           collapseTipLabel: "Hide layers",
@@ -414,31 +618,108 @@ const MapView = () => {
       const clickedCoordinate = event.coordinate;
       const resolution = map.getView().getResolution();
       const projection = map.getView().getProjection();
-      const wmsSource = wmsLayer.getSource();
+      // const wmsSource = wmsLayer.getSource();
 
-      const url = wmsSource.getFeatureInfoUrl(
-        clickedCoordinate,
-        resolution,
-        projection,
+      // const url = wmsSource.getFeatureInfoUrl(
+      //     clickedCoordinate,
+      //     resolution,
+      //     projection,
+      //     {
+      //         'INFO_FORMAT': 'application/json',
+      //         'FEATURE_COUNT': 10
+      //     }
+      // );
+
+      const activeLayers = [
         {
-          INFO_FORMAT: "application/json",
-          FEATURE_COUNT: 10,
-        }
-      );
+          layer: wmsLayer,
+          layerName: "Land Records",
+          condition: wmsLayer.getVisible(),
+        },
+        {
+          layer: vestedLand,
+          layerName: "Vested Land",
+          condition: vestedLand.getVisible(),
+        },
+        {
+          layer: rayatiLand,
+          layerName: "Rayati Land",
+          condition: rayatiLand.getVisible(),
+        },
+        {
+          layer: forestLand,
+          layerName: "Forest Land",
+          condition: forestLand.getVisible(),
+        },
+        {
+          layer: otherLand,
+          layerName: "Others Land",
+          condition: otherLand.getVisible(),
+        },
+        {
+          layer: partlypurchasedLand,
+          layerName: "Partly Purchased Land",
+          condition: partlypurchasedLand.getVisible(),
+        },
+        {
+          layer: fullypurchasedLand,
+          layerName: "Fully Purchased Land",
+          condition: fullypurchasedLand.getVisible(),
+        },
+        {
+          layer: notapprove,
+          layerName: "Cabinet approve but not purchased",
+          condition: notapprove.getVisible(),
+        },
+      ].filter((layerInfo) => layerInfo.condition);
 
-      if (url) {
-        fetch(url)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data && data.features && data.features.length > 0) {
-              setCoordinates(clickedCoordinate);
-              setFeaturesData(data.features.map((f) => f.properties));
-              setSelectedFeatureIndex(0);
-              setIsModalOpen(true);
-            }
-          })
-          .catch((error) => console.error("Error fetching WMS info:", error));
-      }
+      const fetchLayerFeatureInfo = (layerInfo) => {
+        const wmsSource = layerInfo.layer.getSource();
+        const url = wmsSource.getFeatureInfoUrl(
+          clickedCoordinate,
+          resolution,
+          projection,
+          {
+            INFO_FORMAT: "application/json",
+            FEATURE_COUNT: 10,
+          }
+        );
+
+        if (url) {
+          return fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data && data.features && data.features.length > 0) {
+                return {
+                  layerName: layerInfo.layerName,
+                  features: data.features.map((f) => f.properties),
+                };
+              }
+              return null;
+            })
+            .catch((error) => {
+              console.error(
+                `Error fetching WMS info for ${layerInfo.layerName}:`,
+                error
+              );
+              return null;
+            });
+        }
+        return Promise.resolve(null);
+      };
+
+      Promise.all(activeLayers.map(fetchLayerFeatureInfo)).then((results) => {
+        // Filter out null results and find the first layer with features
+        const validResults = results.filter((result) => result !== null);
+        if (validResults.length > 0) {
+          const firstResult = validResults[0];
+          setCoordinates(clickedCoordinate);
+          setFeaturesData(firstResult.features);
+          setCurrentFeatureLayer(firstResult.layerName);
+          setSelectedFeatureIndex(0);
+          setIsModalOpen(true);
+        }
+      });
     };
 
     map.on("click", handleMapClick);
@@ -474,15 +755,21 @@ const MapView = () => {
   };
 
   return (
-    <div className='w-100 h-100'>
-      <div ref={mapElement} className='h-100 w-100' />
+    <div>
+      <div
+        ref={mapElement}
+        style={{
+          width: "100%",
+          height: "calc(100vh - 64px)",
+        }}
+      />
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel='Plot Information'
         style={{
           overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(0, 0, 0, 0.3)", // Softer overlay for a modern look
           },
           content: {
             top: "50%",
@@ -493,35 +780,48 @@ const MapView = () => {
             transform: "translate(-50%, -50%)",
             maxHeight: "80vh",
             overflowY: "auto",
-            borderRadius: "8px",
-            padding: "24px",
+            borderRadius: "10px",
+            padding: "20px",
             border: "none",
-            boxShadow:
-              "0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)",
-            maxWidth: "900px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
+            maxWidth: "800px",
             width: "90%",
+            backgroundColor: "#fff", // White background for content
           },
         }}>
-        <div className='modal-header'>
-          <div className='modal-header-icon'>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='24'
-              height='24'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              stroke-width='2'
-              stroke-linecap='round'
-              stroke-linejoin='round'>
-              <circle cx='12' cy='12' r='10'></circle>
-              <line x1='12' y1='16' x2='12' y2='12'></line>
-              <line x1='12' y1='8' x2='12.01' y2='8'></line>
-            </svg>
+        <div
+          className='modal-header'
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "20px",
+          }}>
+          <div className='modal-header-icon' style={{ marginRight: "10px" }}>
+            <div className='modal-header-icon' style={{ marginRight: "10px" }}>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='24'
+                height='24'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='white'
+                stroke-width='2'
+                stroke-linecap='round'
+                stroke-linejoin='round'>
+                <path d='M12 2C8.13 2 5 5.13 5 9C5 13.53 12 21 12 21C12 21 19 13.53 19 9C19 5.13 15.87 2 12 2Z' />
+                <circle cx='12' cy='9' r='2' fill='#007bff' />
+              </svg>
+            </div>
           </div>
           <div>
-            <h2 className='modal-title'>Plot Information</h2>
-            <p className='modal-subtitle'>
+            <h2
+              className='modal-title'
+              style={{ color: "white", fontSize: "1.5rem", margin: 0 }}>
+              Plot Information
+            </h2>
+            <p
+              className='modal-subtitle'
+              style={{ color: "white", fontSize: "0.9rem" }}>
               View and navigate through the plot records
             </p>
           </div>
@@ -529,46 +829,107 @@ const MapView = () => {
 
         {featuresData.length > 0 ? (
           <>
-            <div className='feature-records-nav'>
-              <span className='feature-records-count'>
+            <div
+              className='feature-records-nav'
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "20px",
+              }}>
+              <span
+                className='feature-records-count'
+                style={{ fontSize: "0.9rem", color: "#555" }}>
                 Record {selectedFeatureIndex + 1} of {featuresData.length}
               </span>
-              <button
-                className='pagination-button'
-                onClick={() =>
-                  setSelectedFeatureIndex((prev) => Math.max(0, prev - 1))
-                }
-                disabled={selectedFeatureIndex === 0}>
-                Previous
-              </button>
-              <button
-                className='pagination-button'
-                onClick={() =>
-                  setSelectedFeatureIndex((prev) =>
-                    Math.min(featuresData.length - 1, prev + 1)
-                  )
-                }
-                disabled={selectedFeatureIndex === featuresData.length - 1}>
-                Next
-              </button>
+              <div>
+                <button
+                  className='pagination-button'
+                  onClick={() =>
+                    setSelectedFeatureIndex((prev) => Math.max(0, prev - 1))
+                  }
+                  disabled={selectedFeatureIndex === 0}
+                  style={{
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    border: "none",
+                    padding: "8px 16px",
+                    borderRadius: "5px",
+                    fontSize: "0.9rem",
+                    cursor:
+                      selectedFeatureIndex === 0 ? "not-allowed" : "pointer",
+                    marginRight: "8px",
+                  }}>
+                  Previous
+                </button>
+                <button
+                  className='pagination-button'
+                  onClick={() =>
+                    setSelectedFeatureIndex((prev) =>
+                      Math.min(featuresData.length - 1, prev + 1)
+                    )
+                  }
+                  disabled={selectedFeatureIndex === featuresData.length - 1}
+                  style={{
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    border: "none",
+                    padding: "8px 16px",
+                    borderRadius: "5px",
+                    fontSize: "0.9rem",
+                    cursor:
+                      selectedFeatureIndex === featuresData.length - 1
+                        ? "not-allowed"
+                        : "pointer",
+                  }}>
+                  Next
+                </button>
+              </div>
             </div>
 
             <div style={{ overflowX: "auto" }}>
-              <table className='records-table'>
+              <table
+                className='records-table'
+                style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
                   <tr>
-                    <th>Field</th>
-                    <th>Value</th>
+                    <th
+                      style={{
+                        textAlign: "left",
+                        padding: "10px",
+                        color: "#007bff",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                      }}>
+                      Field
+                    </th>
+                    <th
+                      style={{
+                        textAlign: "left",
+                        padding: "10px",
+                        color: "#007bff",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                      }}>
+                      Value
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {Object.entries(featuresData[selectedFeatureIndex]).map(
                     ([key, value]) => (
-                      <tr key={key}>
-                        <td style={{ fontWeight: "500" }}>
+                      <tr key={key} style={{ borderBottom: "1px solid #eee" }}>
+                        <td
+                          style={{
+                            fontWeight: "500",
+                            padding: "8px 10px",
+                            color: "#333",
+                          }}>
                           {formatFieldName(key)}
                         </td>
-                        <td>{value}</td>
+                        <td style={{ padding: "8px 10px", color: "#333" }}>
+                          {value}
+                        </td>
                       </tr>
                     )
                   )}
@@ -577,10 +938,27 @@ const MapView = () => {
             </div>
           </>
         ) : (
-          <p>No data available for this location.</p>
+          <p style={{ color: "#777", textAlign: "center" }}>
+            No data available for this location.
+          </p>
         )}
 
-        <button className='close-button' onClick={closeModal}>
+        <button
+          className='close-button'
+          onClick={closeModal}
+          style={{
+            backgroundColor: "#ff4d4d",
+            color: "#fff",
+            border: "none",
+            padding: "10px 20px",
+            borderRadius: "5px",
+            fontSize: "1rem",
+            cursor: "pointer",
+            marginTop: "20px",
+            display: "block",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}>
           Close
         </button>
       </Modal>

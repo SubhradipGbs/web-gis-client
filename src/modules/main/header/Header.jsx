@@ -7,8 +7,9 @@ import { FaBars } from "react-icons/fa";
 import MapHeader from "../../../Components/MapHeader/MapHeader";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { toggleSideNav } from "../../../store/reducers/ui";
 
-const Header = ({ toggleSidebar }) => {
+const Header = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const logout = async () => {
@@ -17,9 +18,10 @@ const Header = ({ toggleSidebar }) => {
     // });
     dispatch(userLogout());
   };
+  const toggleSidebar = () => {
+    dispatch(toggleSideNav());
+  };
   const location = useLocation();
-
-  console.log(location);
 
   return (
     <div className='header'>

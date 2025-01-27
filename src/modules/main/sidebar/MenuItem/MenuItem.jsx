@@ -21,7 +21,7 @@ const MenuItem = ({ item }) => {
     setIsOneOfChildrenActive(false);
     if (item.child) {
       item.child.forEach((m) => {
-        if (location.pathname.startsWith(m.path)) {
+        if (location.pathname.match(m.path)) {
           setIsOneOfChildrenActive(true);
         }
       });
@@ -74,7 +74,7 @@ const MenuItem = ({ item }) => {
               <li
                 key={ch.id}
                 className={`child-nav-items ${
-                  location.pathname.startsWith(ch.path) ? "active" : ""
+                  location.pathname.match(ch.path) ? "active" : ""
                 }`}
                 onClick={() => {
                   handleClick(ch.path);

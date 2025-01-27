@@ -55,6 +55,11 @@ export const demoMenu = [
         name: "Land Records",
         path: "/reports/land",
       },
+      {
+        id: 2,
+        name: "Master Land Records",
+        path: "/reports/land-master",
+      },
     ],
   },
 ];

@@ -11,20 +11,22 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Reports from "./pages/Reports/Reports";
 import UserReport from "./pages/Reports/UserReport/UserReport";
 import LandReport from "./pages/Reports/LandReport/LandReport";
+import MasterLand from "./pages/Reports/LandReport/MasterLand";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<PublicRoute />}>
-          <Route path="/login" element={<Login />} />
+        <Route path='/login' element={<PublicRoute />}>
+          <Route path='/login' element={<Login />} />
         </Route>
-        <Route path="/" element={<PrivateRoute />}>
-          <Route path="/" element={<Main />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/reports" element={<Reports />}>
-              <Route path="user" element={<UserReport />} />
-              <Route path="land" element={<LandReport />} />
+        <Route path='/' element={<PrivateRoute />}>
+          <Route path='/' element={<Main />}>
+            <Route path='/' element={<Dashboard />} />
+            <Route path='/reports' element={<Reports />}>
+              <Route path='user' element={<UserReport />} />
+              <Route path='land' element={<LandReport />} />
+              <Route path='land-master' element={<MasterLand />} />
             </Route>
           </Route>
         </Route>
@@ -32,7 +34,7 @@ function App() {
       <ToastContainer
         autoClose={3000}
         draggable={false}
-        position="top-right"
+        position='top-right'
         hideProgressBar={false}
         newestOnTop
         closeOnClick

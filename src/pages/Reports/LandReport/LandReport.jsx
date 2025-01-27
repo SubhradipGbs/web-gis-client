@@ -119,7 +119,7 @@ const LandReport = () => {
   const { data: lands, isLoading } = useQuery({
     queryKey: ["landRecords"],
     queryFn: async () => {
-      const response = await axios.get("http://localhost:3000/land-all");
+      const response = await axios.get("http://localhost:3000/land/land-all");
       return response.data;
     },
     staleTime: 2 * 60 * 1000,
@@ -143,7 +143,13 @@ const LandReport = () => {
               <div className='loader'></div>
             </div>
           }>
-          <DataTable data={lands} columns={columns} />
+          <DataTable
+            data={lands}
+            columns={columns}
+            plotId='plot_id'
+            areaId='total_area_in_acres'
+            sumRequired
+          />
         </Suspense>
       </div>
     </div>
