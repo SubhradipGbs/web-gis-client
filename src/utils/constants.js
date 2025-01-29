@@ -45,18 +45,18 @@ export const demoMenu = [
     name: "Reports",
     icon: React.createElement(FaClipboardList),
     child: [
-      {
-        id: 1,
-        name: "User Reports",
-        path: "/reports/user",
-      },
+      // {
+      //   id: 1,
+      //   name: "User Reports",
+      //   path: "/reports/user",
+      // },
       {
         id: 2,
         name: "Land Records",
         path: "/reports/land",
       },
       {
-        id: 2,
+        id: 3,
         name: "Master Land Records",
         path: "/reports/land-master",
       },

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./menu.css";
+import { AiOutlineCaretLeft, AiOutlineCaretRight } from "react-icons/ai";
 // import { mapIconToComponent } from "../../utils/Icons";
 
 // const IconComponentLoader = ({ iconName }) => {
@@ -73,12 +74,13 @@ const MenuItem = ({ item }) => {
             {item.child.map((ch) => (
               <li
                 key={ch.id}
-                className={`child-nav-items ${
+                className={`child-nav-items d-flex gap-2 align-items-center ${
                   location.pathname.match(ch.path) ? "active" : ""
                 }`}
                 onClick={() => {
                   handleClick(ch.path);
                 }}>
+                <AiOutlineCaretRight />
                 {ch.name}
               </li>
             ))}

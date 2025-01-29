@@ -12,10 +12,13 @@ const Login = () => {
   const dispatch = useDispatch();
   const login = async (email, password) => {
     setIsLoading(true);
-    const response = await axios.post("http://localhost:3000/auth/login", {
-      email,
-      password,
-    });
+    const response = await axios.post(
+      `${import.meta.env.VITE_MAIN_URL}/auth/login`,
+      {
+        email,
+        password,
+      }
+    );
     setIsLoading(false);
     if (response.status === 200) {
       const user = response.data.data;
@@ -91,7 +94,7 @@ const Login = () => {
               {isLoading ? "Loading..." : "Login"}
             </button>
           </form>
-          {isLoading && <div className='loader'>Loading...</div>}
+          {isLoading && <div className='loading'>Loading...</div>}
         </div>
       </div>
 

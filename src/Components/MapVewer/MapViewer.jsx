@@ -57,7 +57,7 @@ class FeatureInfoControl extends Control {
 
 const MapView = () => {
   const mapElement = useRef(null);
-  const urlGeoServer = "http://localhost:8080/geoserver/WBPDCL/wms";
+  const urlGeoServer = "/geo/geoserver/WBPDCL/wms";
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [featuresData, setFeaturesData] = useState([]);
   const [coordinates, setCoordinates] = useState(null);

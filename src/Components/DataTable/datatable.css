@@ -3,6 +3,29 @@
   width: 100%;
 }
 
+/* .table-container {
+  height: 75vh !important;
+  overflow: hidden !important;
+  overflow-y: scroll !important;
+} */
+
+.table-container {
+  overflow: auto;
+  height: 70vh;
+}
+
+.table-container thead th {
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+}
+
+/* Just common table stuff. Really. */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
 .pagination {
   display: flex;
   justify-content: flex-end;
@@ -26,6 +49,25 @@
 .page-button[disabled] {
   background-color: #e0e0e0;
   color: #999;
+  cursor: not-allowed;
+  border-color: #ccc;
+}
+
+.filterBtn {
+  background-color: #a41c32;
+  color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filterBtn[disabled] {
+  background-color: #cb9696;
+  color: #fff;
   cursor: not-allowed;
   border-color: #ccc;
 }
