@@ -213,12 +213,13 @@ const MasterLand = () => {
         return row.purchased_status || "";
       },
       meta: {
-        filterVariant: "select",
+        filterVariant: "checkbox",
       },
       sortable: true,
       cell: (info) => info.getValue(),
       enableGlobalFilter: true,
       enableColumnFilter: true,
+      filterFn: "arrayIncludes",
       footer: () => null,
     },
     {

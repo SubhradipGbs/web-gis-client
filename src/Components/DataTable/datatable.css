@@ -118,6 +118,27 @@ th {
   font-size: 0.8rem;
 }
 
+.dropdownFilter {
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdownBtn {
+  background: #fff;
+  min-width: 100%;
+  padding: 2px 8px;
+  border: 1px solid #4F4F4F;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
 /* HTML: <div class="loader"></div> */
 .loader {
   width: 15px;

@@ -11,7 +11,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Dropdown, Table } from "react-bootstrap";
 import "./datatable.css";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
-import { FaDownload, FaSort, FaSortDown, FaSortUp } from "react-icons/fa6";
+import {
+  FaChevronDown,
+  FaDownload,
+  FaSort,
+  FaSortDown,
+  FaSortUp,
+} from "react-icons/fa6";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { RiFilterOffFill, RiFilterOffLine } from "react-icons/ri";
@@ -45,6 +51,15 @@ const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
     onPaginationChange: setPagination,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: "includesString",
+    filterFns: {
+      arrayIncludes: (row, columnId, filterValue) => {
+        const cellValue = row.getValue(columnId);
+        if (!filterValue || filterValue.length === 0) {
+          return true;
+        }
+        return Array.isArray(filterValue) && filterValue.includes(cellValue);
+      },
+    },
     onColumnFiltersChange: setColumnFiltered,
     state: {
       pagination,
@@ -213,7 +228,7 @@ const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
               className='filterBtn'
               onClick={toggleFilterOpen}
               disabled={columnfilterd.length == 0}>
-              Clear <RiFilterOffFill />
+              Clear <RiFilterOffFill size={16} />
             </button>
           </div>
           {table.getCoreRowModel().rows.length > 0 && (
@@ -471,10 +486,9 @@ export default DataTable;
 
 function Filter({ column }) {
   const { filterVariant } = column.columnDef.meta ?? {};
-
   const columnFilterValue = column.getFilterValue();
 
-  const sortedUniqueValues = React.useMemo(
+  const sortedUniqueValues = useMemo(
     () =>
       filterVariant === "range"
         ? []
@@ -483,6 +497,13 @@ function Filter({ column }) {
             .slice(0, 5000),
     [column.getFacetedUniqueValues(), filterVariant]
   );
+  const checkBoxValues = useMemo(
+    () =>
+      Array.from(column.getFacetedUniqueValues().keys()).sort().slice(0, 5000),
+    [column.getFacetedUniqueValues()]
+  );
+
+  const [showDropdown, setShowDropdown] = React.useState(false);
 
   return filterVariant === "range" ? (
     <div>
@@ -528,17 +549,51 @@ function Filter({ column }) {
       <option value=''>All</option>
       {sortedUniqueValues.map((value) => (
         <option value={value} key={value}>
-          {value}
+          {value || "NIL"}
         </option>
       ))}
     </select>
+  ) : filterVariant === "checkbox" ? (
+    <div style={{ position: "relative" }}>
+      <button
+        className='dropdownBtn'
+        onClick={() => setShowDropdown((prev) => !prev)}>
+        Choose an option
+        <FaChevronDown />
+      </button>
+      {showDropdown && (
+        <div className='dropdownFilter'>
+          {sortedUniqueValues.map((value) => (
+            <label
+              key={value}
+              style={{
+                display: "block",
+                marginBottom: "5px",
+                fontSize: "0.7rem",
+                verticalAlign: "middle",
+              }}>
+              <input
+                className='me-1'
+                type='checkbox'
+                checked={columnFilterValue?.includes(value) || false}
+                onChange={(e) => {
+                  const isChecked = e.target.checked;
+                  console.log(columnFilterValue);
+                  column.setFilterValue((prev) =>
+                    isChecked
+                      ? [...(prev || []), value]
+                      : prev?.filter((v) => v !== value) || []
+                  );
+                }}
+              />
+              {value || "NIL"}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
   ) : (
     <>
-      {/* <datalist id={column.id + "list"}>
-        {sortedUniqueValues.map((value) => (
-          <option value={value} key={value} />
-        ))}
-      </datalist> */}
       <DebouncedInput
         type='text'
         value={columnFilterValue ?? ""}
@@ -551,7 +606,6 @@ function Filter({ column }) {
   );
 }
 
-// A typical debounced input react component
 function DebouncedInput({
   value: initialValue,
   onChange,
