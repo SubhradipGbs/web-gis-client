@@ -192,8 +192,12 @@ const MasterLand = () => {
       isSummable: true,
       sortable: true,
       cell: (info) => info.getValue(),
+      meta: {
+        filterVariant: "checkbox",
+      },
       enableGlobalFilter: true,
       enableColumnFilter: true,
+      filterFn: "arrayIncludes",
       footer: (info) => {
         const total = info.table
           .getFilteredRowModel()

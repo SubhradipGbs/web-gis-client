@@ -562,7 +562,30 @@ function Filter({ column }) {
         <FaChevronDown />
       </button>
       {showDropdown && (
-        <div className='dropdownFilter'>
+        <div className='dropdownFilter w-100 shadow p-1'>
+          <label
+            style={{
+              display: "block",
+              marginBottom: "5px",
+              fontSize: "0.7rem",
+              verticalAlign: "middle",
+            }}>
+            <input
+              className='me-1'
+              type='checkbox'
+              checked={
+                columnFilterValue?.length == sortedUniqueValues?.length || false
+              }
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                console.log(columnFilterValue);
+                column.setFilterValue((prev) =>
+                  isChecked ? [...sortedUniqueValues] : undefined
+                );
+              }}
+            />
+            Select All
+          </label>
           {sortedUniqueValues.map((value) => (
             <label
               key={value}
@@ -571,6 +594,7 @@ function Filter({ column }) {
                 marginBottom: "5px",
                 fontSize: "0.7rem",
                 verticalAlign: "middle",
+                whiteSpace: "nowrap",
               }}>
               <input
                 className='me-1'
@@ -578,7 +602,6 @@ function Filter({ column }) {
                 checked={columnFilterValue?.includes(value) || false}
                 onChange={(e) => {
                   const isChecked = e.target.checked;
-                  console.log(columnFilterValue);
                   column.setFilterValue((prev) =>
                     isChecked
                       ? [...(prev || []), value]
