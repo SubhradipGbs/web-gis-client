@@ -7,7 +7,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { Dropdown, Table } from "react-bootstrap";
 import "./datatable.css";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
@@ -24,11 +24,18 @@ import { RiFilterOffFill, RiFilterOffLine } from "react-icons/ri";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
-  const [newData, setNewData] = useState([]);
-  // const [modData, setModData] = useState([]);
-  const [totalArea, setTotalArea] = useState(0);
-  const [filterOpen, setFilterOpen] = useState({});
+const DataTable = ({
+  data,
+  columns,
+  areaId,
+  plotId,
+  sumRequired = false,
+  columnPinning = {
+    left: [],
+    right: [],
+  },
+}) => {
+  const [expanded, setExpanded] = useState({});
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 100,
@@ -37,7 +44,7 @@ const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
   const [columnfilterd, setColumnFiltered] = useState([]);
 
   const memoizedData = React.useMemo(() => data, [data]);
-  const memoizedColumns = React.useMemo(() => columns, [columns]);
+  const memoizedColumns = React.useMemo(() => columns, []);
 
   const table = useReactTable({
     data: memoizedData,
@@ -50,6 +57,7 @@ const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onPaginationChange: setPagination,
     onGlobalFilterChange: setGlobalFilter,
+    getSubRows: (row) => row.owner || [],
     globalFilterFn: "includesString",
     filterFns: {
       arrayIncludes: (row, columnId, filterValue) => {
@@ -63,9 +71,12 @@ const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
     onColumnFiltersChange: setColumnFiltered,
     state: {
       pagination,
+      expanded,
       globalFilter,
       columnFilters: columnfilterd,
+      columnPinning: columnPinning,
     },
+    onExpandedChange: setExpanded,
     initialState: {
       pagination,
       globalFilter,
@@ -73,7 +84,32 @@ const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
         .filter((col) => col.initialFilterValue)
         .map((col) => ({ id: col.accessor, value: col.initialFilterValue })),
     },
+    enableColumnPinning: true,
+    debugTable: true,
   });
+
+  const getCommonPinningStyles = (column) => {
+    const isPinned = column.getIsPinned();
+    const isLastLeftPinnedColumn =
+      isPinned === "left" && column.getIsLastColumn("left");
+    const isFirstRightPinnedColumn =
+      isPinned === "right" && column.getIsFirstColumn("right");
+
+    return {
+      boxShadow: isLastLeftPinnedColumn
+        ? "-4px 0 4px -4px gray inset"
+        : isFirstRightPinnedColumn
+        ? "4px 0 4px -4px gray inset"
+        : undefined,
+      left:
+        isPinned === "left" ? `${column.getStart("left") - 1}px` : undefined,
+      right: isPinned === "right" ? `${column.getAfter("right")}px` : undefined,
+      opacity: isPinned ? 0.95 : 1,
+      position: isPinned ? "sticky" : "relative",
+      width: column.getSize(),
+      zIndex: isPinned ? 1 : 0,
+    };
+  };
 
   const debounce = (func, delay) => {
     let debounceTimer;
@@ -316,14 +352,17 @@ const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
                 {headergrp.headers.map((header) => (
                   <th
                     key={header.id}
+                    colSpan={header.colSpan}
                     style={{
+                      ...getCommonPinningStyles(header.column),
                       verticalAlign: `${
                         header.column.getCanFilter() ? "middle" : "top"
                       }`,
                       whiteSpace: "nowrap",
                       cursor: "pointer",
+                      backgroundColor: "#E5E5E5",
                     }}
-                    className='px-2 cursor-pointer'>
+                    className='px-2 cursor-pointer table-active'>
                     <span
                       className='d-flex justify-content-between align-items-center gap-2 mb-1'
                       onClick={header.column.getToggleSortingHandler()}>
@@ -372,15 +411,38 @@ const DataTable = ({ data, columns, areaId, plotId, sumRequired = false }) => {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} style={{ whiteSpace: "nowrap" }}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
+              <Fragment key={row.id}>
+                <tr>
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      style={{
+                        whiteSpace: "nowrap",
+                        ...getCommonPinningStyles(cell.column),
+                        height: "100%",
+                      }}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+                {row.getIsExpanded() &&
+                  row.original.owner.map((item) => (
+                    <tr>
+                      <td colSpan={1} style={{ backgroundColor: "gray" }}></td>
+                      <td colSpan={8}></td>
+                      <td colSpan={1}>{item.owner_name_or_raiayat}</td>
+                      <td colSpan={1}></td>
+                      <td colSpan={1}>{item.lr_khatian_no}</td>
+                      <td colSpan={1}>{item.owner_address_or_raiayat}</td>
+                      <td colSpan={1}>{item.owner_share_in_plot}</td>
+                      <td colSpan={row.getVisibleCells().length - 14}></td>
+                    </tr>
+                  ))}
+              </Fragment>
             ))}
-            <tr>{}</tr>
             {!data.length ||
               (table.getFilteredRowModel().rows.length == 0 && (
                 <tr>
