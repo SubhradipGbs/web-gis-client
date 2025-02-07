@@ -1,41 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { lazy, Suspense, useMemo, useRef, useState } from "react";
+import React, { lazy, Suspense, useMemo, useState } from "react";
 import "./landreport.css";
 import axios from "axios";
-import {
-  FaChevronCircleDown,
-  FaChevronCircleUp,
-  FaInfoCircle,
-} from "react-icons/fa";
-import { ListGroup, Modal, Overlay, Popover } from "react-bootstrap";
+import { FaInfoCircle } from "react-icons/fa";
+import { Modal } from "react-bootstrap";
 const DataTable = lazy(() => import("../../../Components/DataTable/DataTable"));
 
-const OverlayComp = ({ info }) => {
-  const ref = useRef(null);
-  const { row, getValue } = info;
-  return (
-    <>
-      <span ref={ref}>{getValue()}</span>
-      <Overlay show={row.getIsExpanded()} target={ref} placement='bottom'>
-        <Popover>
-          <Popover.Body>
-            <ListGroup>
-              {row.original?.owner.map((item) => (
-                <ListGroup.Item>{item.owner_name_or_raiayat}</ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Popover.Body>
-        </Popover>
-      </Overlay>
-    </>
-  );
-};
-
-const LandReport = () => {
+const NewLandReport = () => {
   const [openModal, setOpenModal] = useState(false);
   const [ownerInfo, setInfo] = useState([]);
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(0);
-  const targetRef = useRef(null);
 
   const showInfo = (row) => {
     setInfo(row.original.owner);
@@ -101,16 +75,16 @@ const LandReport = () => {
       enableColumnFilter: true,
       footer: () => null,
     },
-    {
-      id: "rs_plot_no",
-      header: "RS Plot No.",
-      accessorKey: "rs_plot_no",
-      sortable: true,
-      cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
-      enableColumnFilter: true,
-      footer: () => null,
-    },
+    // {
+    //   id: "rs_plot_no",
+    //   header: "RS Plot No.",
+    //   accessorKey: "rs_plot_no",
+    //   sortable: true,
+    //   cell: (info) => info.getValue(),
+    //   enableGlobalFilter: true,
+    //   enableColumnFilter: true,
+    //   footer: () => null,
+    // },
     {
       id: "total_area_in_acres",
       header: "Total Area (acre)",
@@ -160,9 +134,8 @@ const LandReport = () => {
     {
       id: "owner_name_or_raiayat",
       header: "Owner Name/Raiayat",
-      accessorKey: "owner_name_or_raiayat",
+      accessorKey: "owner_names",
       sortable: true,
-      // cell: (info) => <OverlayComp info={info} />,
       cell: (info) => info.getValue(),
       meta: {
         filterVariant: "select",
@@ -188,74 +161,45 @@ const LandReport = () => {
     //     </span>
     //   ),
     // },
-    {
-      id: "expander",
-      header: () => null,
-      cell: ({ row, getValue }) => (
-        <span className='d-flex justify-content-center align-items-center'>
-          {row.getCanExpand() && row.original?.owner.length > 1 ? (
-            <button
-              className='me-1 table-btn'
-              onClick={row.getToggleExpandedHandler()}>
-              {row.getIsExpanded() ? (
-                <FaChevronCircleUp color='#001F3D' opacity={0.8} />
-              ) : (
-                <FaChevronCircleDown color='#001F3D' opacity={0.8} />
-              )}
-            </button>
-          ) : null}
-        </span>
-      ),
-    },
-    {
-      id: "lr_khatian_no",
-      header: "LR Khatian No.",
-      accessorKey: "lr_khatian_no",
-      sortable: true,
-      cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
-      enableColumnFilter: false,
-      footer: () => null,
-    },
-    {
-      id: "owner_address_or_raiayat",
-      header: "Owner Address/Raiayat",
-      accessorKey: "owner_address_or_raiayat",
-      sortable: true,
-      cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
-      enableColumnFilter: false,
-      footer: () => null,
-    },
-    {
-      id: "owner_share_in_plot",
-      header: "Owner Share in Plot",
-      accessorKey: "owner_share_in_plot",
-      sortable: true,
-      cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
-      enableColumnFilter: false,
-      footer: () => null,
-    },
-    {
-      id: "area_owned_in_acres",
-      header: "Area Owned (acre)",
-      accessorKey: "area_owned_in_acres",
-      sortable: true,
-      cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
-      enableColumnFilter: true,
-      footer: (info) => {
-        const total = info.table
-          .getFilteredRowModel()
-          .rows.reduce(
-            (sum, row) =>
-              sum + (parseFloat(row.original.area_owned_in_acres) || 0),
-            0
-          );
-        return total.toFixed(4);
-      },
-    },
+    // {
+    //   id: "expander",
+    //   header: () => null,
+    //   cell: ({ row, getValue }) => (
+    //     <span className='d-flex justify-content-center align-items-center'>
+    //       {row.getCanExpand() && row.original?.owner.length > 1 ? (
+    //         <button
+    //           className='me-1 table-btn'
+    //           onClick={row.getToggleExpandedHandler()}>
+    //           {row.getIsExpanded() ? (
+    //             <FaChevronCircleUp color='#001F3D' opacity={0.8} />
+    //           ) : (
+    //             <FaChevronCircleDown color='#001F3D' opacity={0.8} />
+    //           )}
+    //         </button>
+    //       ) : null}
+    //     </span>
+    //   ),
+    // },
+    //
+    // {
+    //   id: "area_owned_in_acres",
+    //   header: "Area Owned (acre)",
+    //   accessorKey: "area_owned_in_acres",
+    //   sortable: true,
+    //   cell: (info) => info.getValue(),
+    //   enableGlobalFilter: true,
+    //   enableColumnFilter: true,
+    //   footer: (info) => {
+    //     const total = info.table
+    //       .getFilteredRowModel()
+    //       .rows.reduce(
+    //         (sum, row) =>
+    //           sum + (parseFloat(row.original.area_owned_in_acres) || 0),
+    //         0
+    //       );
+    //     return total.toFixed(4);
+    //   },
+    // },
     {
       id: "distance_from_nh_meters",
       header: "Distance from NH(m)",
@@ -279,10 +223,10 @@ const LandReport = () => {
   ];
 
   const { data: lands, isLoading } = useQuery({
-    queryKey: ["landRecords"],
+    queryKey: ["newlandRecords"],
     queryFn: async () => {
       const response = await axios.get(
-        "http://192.168.0.112:3000/land/land-all"
+        "http://192.168.0.112:3000/land/land-new"
       );
       return response.data;
     },
@@ -320,7 +264,7 @@ const LandReport = () => {
       }}>
       <h5>Land Records</h5>
       <div>
-        {/* <Modal show={openModal} onHide={() => setOpenModal(false)} centered>
+        <Modal show={openModal} onHide={() => setOpenModal(false)} centered>
           <Modal.Header
             className='text-light'
             style={{ backgroundColor: "#001F3D" }}>
@@ -455,14 +399,7 @@ const LandReport = () => {
               Close
             </button>
           </Modal.Body>
-        </Modal> */}
-        {/* <Overlay target={targetRef.current} show={openModal} placement='bottom'>
-          <Popover>
-            <Popover.Body>
-              <h1>Hello World</h1>
-            </Popover.Body>
-          </Popover>
-        </Overlay> */}
+        </Modal>
       </div>
       <div style={{ width: "100%" }}>
         <Suspense
@@ -477,7 +414,7 @@ const LandReport = () => {
             plotId='plot_id'
             areaId='total_area_in_acres'
             sumRequired
-            // columnPinning={pinnedColumn}
+            columnPinning={pinnedColumn}
           />
         </Suspense>
       </div>
@@ -485,4 +422,4 @@ const LandReport = () => {
   );
 };
 
-export default LandReport;
+export default NewLandReport;

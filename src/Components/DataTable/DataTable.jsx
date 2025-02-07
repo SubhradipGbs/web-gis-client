@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { Fragment, useEffect, useMemo, useState } from "react";
-import { Dropdown, Table } from "react-bootstrap";
+import { Dropdown, Overlay, Popover, Table } from "react-bootstrap";
 import "./datatable.css";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 import {
@@ -412,7 +412,7 @@ const DataTable = ({
           <tbody>
             {table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
-                <tr>
+                <tr style={{ position: "relative" }}>
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
@@ -430,15 +430,33 @@ const DataTable = ({
                 </tr>
                 {row.getIsExpanded() &&
                   row.original.owner.map((item) => (
-                    <tr>
-                      <td colSpan={1} style={{ backgroundColor: "gray" }}></td>
-                      <td colSpan={8}></td>
-                      <td colSpan={1}>{item.owner_name_or_raiayat}</td>
-                      <td colSpan={1}></td>
-                      <td colSpan={1}>{item.lr_khatian_no}</td>
-                      <td colSpan={1}>{item.owner_address_or_raiayat}</td>
-                      <td colSpan={1}>{item.owner_share_in_plot}</td>
-                      <td colSpan={row.getVisibleCells().length - 14}></td>
+                    <tr
+                      key={item.lr_khatian_no}
+                      style={{ backgroundColor: "#9DC08B !important" }}>
+                      <td
+                        colSpan={1}
+                        style={{ backgroundColor: "#9DC08B" }}></td>
+                      <td
+                        colSpan={8}
+                        style={{ backgroundColor: "#9DC08B" }}></td>
+                      <td colSpan={1} style={{ backgroundColor: "#9DC08B" }}>
+                        {item.owner_name_or_raiayat}
+                      </td>
+                      <td
+                        colSpan={1}
+                        style={{ backgroundColor: "#9DC08B" }}></td>
+                      <td colSpan={1} style={{ backgroundColor: "#9DC08B" }}>
+                        {item.lr_khatian_no}
+                      </td>
+                      <td colSpan={1} style={{ backgroundColor: "#9DC08B" }}>
+                        {item.owner_address_or_raiayat}
+                      </td>
+                      <td colSpan={1} style={{ backgroundColor: "#9DC08B" }}>
+                        {item.owner_share_in_plot}
+                      </td>
+                      <td
+                        colSpan={row.getVisibleCells().length - 14}
+                        style={{ backgroundColor: "#9DC08B" }}></td>
                     </tr>
                   ))}
               </Fragment>

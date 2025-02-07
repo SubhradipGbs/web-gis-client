@@ -17,6 +17,7 @@ const Sidebar = () => {
             <MenuItem key={item.id} item={item} />
           ))}
         </ul>
+        <h5>Hello</h5>
       </div>
     </div>
   );

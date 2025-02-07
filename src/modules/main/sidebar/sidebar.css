@@ -11,6 +11,13 @@
   box-shadow: 0 0 8px rgba(249, 249, 249, 0.5);
 }
 
+.sidebar-body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .sidebar.collapsed {
   width: 0px;
 }

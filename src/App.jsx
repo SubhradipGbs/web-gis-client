@@ -12,6 +12,7 @@ import Reports from "./pages/Reports/Reports";
 import UserReport from "./pages/Reports/UserReport/UserReport";
 import LandReport from "./pages/Reports/LandReport/LandReport";
 import MasterLand from "./pages/Reports/LandReport/MasterLand";
+import NewLandReport from "./pages/Reports/LandReport/NewLandReport";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path='/reports' element={<Reports />}>
               <Route path='user' element={<UserReport />} />
               <Route path='land' element={<LandReport />} />
+              <Route path='new-land' element={<NewLandReport />} />
               <Route path='land-master' element={<MasterLand />} />
             </Route>
           </Route>
