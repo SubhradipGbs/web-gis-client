@@ -1,15 +1,11 @@
 import React from "react";
 import { Table } from "react-bootstrap";
 import { demoReports } from "../../../utils/constants";
-import DataTable from "../../../Components/DataTable/DataTable";
 
 const UserReport = () => {
   return (
     <div>
       <h3>User Log Report</h3>
-      {/* <div>
-        <DataTable 
-      </div> */}
       <Table
         size='sm'
         bordered

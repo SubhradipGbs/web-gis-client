@@ -52,3 +52,27 @@
   align-items: center;
   justify-content: center;
 }
+
+.settings-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.settings-menu-item {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  vertical-align: middle;
+  transition: all 0.3s;
+  text-transform: capitalize;
+}
+
+.settings-menu-item:where(.active) {
+  background-color: #2973B2;
+  color: #fff;
+}
