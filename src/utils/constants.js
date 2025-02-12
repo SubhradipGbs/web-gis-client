@@ -68,3 +68,14 @@ export const demoMenu = [
     ],
   },
 ];
+
+export const colorCodes = [
+  { title: "Other's Land", color: "#ADD8E6", border: "#8B0000" },
+  { title: "Basalt Boundary", color: "#00DFFF" },
+  { title: "Coal Boundary", color: "#FFFFFF", border: "#FF0000" },
+  { title: "Forest Land", color: "#228B22", border: "#006400" },
+  { title: "Rayati Land", color: "#9dbdff", border: "#000000" },
+  { title: "Vested Land", color: "#FFD700", border: "#B8860B" },
+  { title: "Partly Purchase", color: "#063970", border: "#8B0000" },
+  { title: "Borehole", color: "#40ff00", border: "#00b29d" },
+];

@@ -4,6 +4,8 @@ import "ol/ol.css";
 import { View } from "ol";
 import { Tile as TileLayer } from "ol/layer";
 import { OSM, TileWMS, TileImage } from "ol/source";
+import Image from "ol/layer/Image"; // Correct import for OpenLayers v6+
+import ImageWMS from "ol/source/ImageWMS";
 import {
   ScaleLine,
   Zoom,
@@ -20,6 +22,8 @@ import "ol-layerswitcher/dist/ol-layerswitcher.css";
 import { Group } from "ol/layer";
 import Modal from "react-modal";
 import { createStringXY } from "ol/coordinate";
+import Tile from "ol/layer/Tile";
+import { TileGrid } from "ol/tilegrid";
 
 class FeatureInfoControl extends Control {
   constructor(options) {
@@ -57,7 +61,7 @@ class FeatureInfoControl extends Control {
 
 const MapView = () => {
   const mapElement = useRef(null);
-  const urlGeoServer = "/geo/geoserver/WBPDCL/wms";
+  const urlGeoServer = "http://localhost:8080/geoserver/WBPDCL/wms";
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [featuresData, setFeaturesData] = useState([]);
   const [coordinates, setCoordinates] = useState(null);
@@ -111,48 +115,170 @@ const MapView = () => {
             }
 
             .ol-layerswitcher {
-                top: 0.5em !important;
-                left: 0.5em !important;
-                right: auto !important;
-                background-color: white !important;
-                border-radius: 8px !important;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-            }
+    position: absolute;
+    top: 1em;
+    left: 1em !important;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    max-height: calc(100% - 2em);
+    overflow-y: auto;
+    width: 300px;
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    transition: all 0.3s ease;
+}
 
-            .ol-layerswitcher button {
-                background-color: white !important;
-                border: 1px solid #e2e8f0 !important;
-                border-radius: 8px !important;
-                width: 40px !important;
-                height: 40px !important;
-            }
+/* Custom scrollbar */
+.ol-layerswitcher::-webkit-scrollbar {
+    width: 8px;
+}
 
-            .ol-layerswitcher-buttons {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
+.ol-layerswitcher::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
 
-            .ol-layerswitcher.ol-control.ol-collapsed {
-                background: none !important;
-            }
+.ol-layerswitcher::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 4px;
+}
 
-            .ol-layerswitcher.ol-control.ol-collapsed button {
-                background-color: white !important;
-            }
+.ol-layerswitcher::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
 
-            .ol-layerswitcher > button {
-                float: none !important;
-                margin: 0 !important;
-            }
+/* Group Styling */
+.ol-layerswitcher .group {
+    margin-bottom: 15px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
 
-            .ol-layerswitcher.ol-collapsed > button {
-                margin: 0 !important;
-            }
+/* Group Labels with Gradients and Icons */
+.ol-layerswitcher .group-label {
+    position: relative;
+    padding: 12px 16px 12px 45px; /* Extra padding for icon */
+    margin: 0;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    text-align: left;
+    background-position: 12px center;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+}
+
+/* Specific group backgrounds and icons */
+.ol-layerswitcher .group:nth-child(1) .group-label {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>');
+}
+
+.ol-layerswitcher .group:nth-child(2) .group-label {
+    background: linear-gradient(135deg, #10b981, #047857);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8-2h4v2h-4V4z"/></svg>');
+}
+
+.ol-layerswitcher .group:nth-child(3) .group-label {
+    background: linear-gradient(135deg, #f59e0b, #b45309);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
+}
+
+.ol-layerswitcher .group:nth-child(4) .group-label {
+    background: linear-gradient(135deg, #ec4899, #be185d);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M14 6l-4.22 5.63 1.25 1.67L14 9.33 19 16h-8.46l-4.01-5.37L1 18h22L14 6zM5 16l1.52-2.03L8.04 16H5z"/></svg>');
+}
+
+/* Layer Items */
+.ol-layerswitcher .layerDiv {
+    padding: 10px 16px;
+    margin: 5px;
+    background-color: #f8fafc;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.ol-layerswitcher .layerDiv:hover {
+    background-color: #f1f5f9;
+    transform: translateX(5px);
+}
+
+/* Checkbox styling */
+.ol-layerswitcher .layerDiv input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #cbd5e1;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    top:0.4em;
+    transition: all 0.2s ease;
+}
+.layer-switcher li input{
+  top:0.4em;
+} 
+
+.ol-layerswitcher .layerDiv input[type="checkbox"]:checked {
+    background-color: #3b82f6;
+    border-color: #2563eb;
+}
+
+.ol-layerswitcher .layerDiv input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Layer labels */
+.ol-layerswitcher .layerDiv label {
+    color: #1e293b;
+    font-size: 13px;
+    cursor: pointer;
+    flex-grow: 1;
+    margin-left: 8px;
+}
+
+/* Hover effects */
+.ol-layerswitcher .layerDiv:hover label {
+    color: #0f172a;
+}
+
+/* Panel header */
+.ol-layerswitcher .panel {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+/* Animation for group expansion/collapse */
+.ol-layerswitcher .group {
+    transition: all 0.3s ease;
+}
+
+.ol-layerswitcher .group.ol-layer-hidden {
+    max-height: 45px;
+    overflow: hidden;
+}
+
 
             .layer-panel {
                 width: 250px;
-                background-color: #f8f9fa;
+                background-color: #1e40af;
                 padding: 1rem;
                 box-shadow: 2px 0 5px rgba(0,0,0,0.1);
                 overflow-y: auto;
@@ -313,13 +439,58 @@ const MapView = () => {
             .map .ol-rotate {
                 top: 3em;
             }
+  .ol-scale-combined {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        bottom: 8px;
+        left: 8px;
+        padding: 2px;
+        position: absolute;
+    }
+
+    .ol-custom-overviewmap {
+        left: 8px;
+        bottom: 40px !important;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        padding: 2px;
+    }
+
+    .ol-custom-overviewmap .ol-overviewmap-map {
+        border: none;
+        width: 150px;
+        height: 150px;
+    }
+
+    .ol-custom-overviewmap canvas {
+        border: 1px solid #ccc;
+    }
+
+    .ol-scale-line {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 4px;
+        bottom: 8px;
+        left: 8px;
+        padding: 2px;
+        position: absolute;
+    }
+
+    .ol-scale-line-inner {
+        border: 1px solid #000;
+        border-top: none;
+        color: #000;
+        font-size: 10px;
+        text-align: center;
+        margin: 1px;
+        padding: 0px 2px;
+    }
         `;
     document.head.appendChild(style);
 
     const osmLayer = new TileLayer({
       source: new OSM(),
       title: "OSM Base Layer",
-      visible: true,
+      visible: false,
     });
 
     const googleLayerSatellite = new TileLayer({
@@ -327,7 +498,7 @@ const MapView = () => {
       source: new TileImage({
         url: "http://mt1.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&s=Ga",
       }),
-      visible: false,
+      visible: true,
       opacity: 0.6,
     });
 
@@ -376,16 +547,49 @@ const MapView = () => {
       opacity: 0.6,
     });
 
+    // const drone_image = new Image({
+    //     title: "DroneImage",
+    //     source: new ImageWMS({
+    //         url: urlGeoServer,
+    //         params: {
+    //             LAYERS: "WBPDCL:droneimage",
+    //             'FORMAT': 'image/png',
+    //         },
+    //         projection: 'EPSG:32645',
+    //         maxResolution: 0.175,
+    //         tileSize: 256
+    //     }),
+    //     visible: true
+    // });
+
+    const drone_image = new Image({
+      title: "DroneImage",
+      source: new ImageWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:droneimage",
+          FORMAT: "image/png",
+          TILED: true,
+          NO_CACHE: true,
+        },
+        projection: "EPSG:32645",
+        maxResolution: 0.175,
+        tileSize: 256,
+      }),
+      visible: true,
+    });
+
     const basemapGroup = new Group({
       title: "Basemap",
       layers: [
-        googleLayerHybrid,
-        googleLayerTerrain,
+        // googleLayerHybrid,
+        // googleLayerTerrain,
         googleLayerRoadmap,
         googleLayerRoadNames,
         googleLayerSatellite,
-        googleLayerHybrid2,
+        // googleLayerHybrid2,
         osmLayer,
+        drone_image,
       ],
     });
 
@@ -401,6 +605,103 @@ const MapView = () => {
       }),
       visible: false,
       opacity: 0.6,
+    });
+
+    const vw_basalt_vested = new TileLayer({
+      title: "Basalt-Vested Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_basalt_vested",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const vw_basalt_rayati = new TileLayer({
+      title: "Basalt-Rayati Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_basalt_rayati",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const vw_basalt_partlypurchased = new TileLayer({
+      title: "Basalt-Partly Purchased Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_basalt_partlypurchased",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const vw_basalt_fullpurchased = new TileLayer({
+      title: "Basalt-Fully Purchased Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_basalt_fullpurchased",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    // const vw_basalt_ntapprove = new TileLayer({
+    //   title: "Basalt-Cabinate Approved but Not Purchased",
+    //   source: new TileWMS({
+    //     url: urlGeoServer,
+    //     params: {
+    //       LAYERS: "WBPDCL:vw_basalt_ntapprove",
+    //       TILED: true,
+    //     },
+    //     serverType: "geoserver",
+    //   }),
+    //   visible: false,
+    //   opacity: 0.6,
+    // });
+
+    const vw_ba_partlypurchased = new TileLayer({
+      title: "Basalt-Partly Purchased Portion",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_ba_partlypurchased",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const BasaltGroup = new Group({
+      title: "Basalt Boundary",
+      layers: [
+        // vw_basalt_ntapprove,
+        vw_basalt_partlypurchased,
+        vw_ba_partlypurchased,
+        vw_basalt_fullpurchased,
+        vw_basalt_vested,
+        vw_basalt_rayati,
+        balsalt_l,
+      ],
     });
 
     const coalLayer = new TileLayer({
@@ -419,13 +720,102 @@ const MapView = () => {
       visible: true,
     });
 
-    const BasaltGroup = new Group({
-      title: "Boundary",
+    const vw_coal_vested = new TileLayer({
+      title: "Coal-Vested Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_coal_vested",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const vw_coal_rayati = new TileLayer({
+      title: "Coal-Rayati Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_coal_rayati",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const vw_coal_partlypurchased = new TileLayer({
+      title: "Coal-Partly Purchased Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_coal_partlypurchased",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const vw_coal_fullpurchased = new TileLayer({
+      title: "Coal-Fully Purchased Land",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_coal_fullpurchased",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    // const vw_coal_ntapprove = new TileLayer({
+    //   title: "Coal-Cabinate Approved but Not Purchased",
+    //   source: new TileWMS({
+    //     url: urlGeoServer,
+    //     params: {
+    //       LAYERS: "WBPDCL:vw_coal_ntapprove",
+    //       TILED: true,
+    //     },
+    //     serverType: "geoserver",
+    //   }),
+    //   visible: false,
+    //   opacity: 0.6,
+    // });
+
+    //vw_cl_partlypurchase
+
+    const vw_cl_partlypurchase = new TileLayer({
+      title: "Coal-Partly Purchased Portion",
+      source: new TileWMS({
+        url: urlGeoServer,
+        params: {
+          LAYERS: "WBPDCL:vw_cl_partlypurchase",
+          TILED: true,
+        },
+        serverType: "geoserver",
+      }),
+      visible: false,
+      opacity: 0.6,
+    });
+
+    const CoalGroup = new Group({
+      title: "Coal Boundary",
       layers: [
-        balsalt_l,
+        // vw_coal_ntapprove,
+        vw_coal_partlypurchased,
+        vw_cl_partlypurchase,
+        vw_coal_fullpurchased,
+        vw_coal_vested,
+        vw_coal_rayati,
         coalLayer,
-        // balsalt_m,
-        // balsalt_s
       ],
     });
 
@@ -545,12 +935,26 @@ const MapView = () => {
       opacity: 0.6,
     });
 
-    const notapprove = new TileLayer({
-      title: "Cabinate Approved but Not Purchased",
+    // const notapprove = new TileLayer({
+    //   title: "Cabinate Approved but Not Purchased",
+    //   source: new TileWMS({
+    //     url: urlGeoServer,
+    //     params: {
+    //       LAYERS: "WBPDCL:vw_purchase_ntapprove",
+    //       TILED: true,
+    //     },
+    //     serverType: "geoserver",
+    //   }),
+    //   visible: false,
+    //   opacity: 0.6,
+    // });
+
+    const vw_borehole = new TileLayer({
+      title: "Borehole's",
       source: new TileWMS({
         url: urlGeoServer,
         params: {
-          LAYERS: "WBPDCL:vw_purchase_ntapprove",
+          LAYERS: "WBPDCL:borehole_locations",
           TILED: true,
         },
         serverType: "geoserver",
@@ -562,14 +966,39 @@ const MapView = () => {
     const landGroup = new Group({
       title: "Land Categories",
       layers: [
-        notapprove,
+        // notapprove,
         fullypurchasedLand,
         partlypurchasedLand,
         vestedLand,
         rayatiLand,
         forestLand,
+        vw_borehole,
         otherLand,
       ],
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const layerSwitcherButton = document.createElement("button");
+      layerSwitcherButton.classList.add("layer-switcher-btn");
+      layerSwitcherButton.setAttribute("title", "Toggle OSM Base Layer");
+      layerSwitcherButton.innerHTML = '<i class="icon-osm"></i>'; // Example icon, you can use a library like FontAwesome
+      layerSwitcherButton.addEventListener("click", function () {
+        osmLayer.setVisible(!osmLayer.getVisible());
+        layerSwitcherButton.classList.toggle("active", osmLayer.getVisible());
+        layerSwitcherButton.classList.toggle(
+          "inactive",
+          !osmLayer.getVisible()
+        );
+      });
+
+      const layerSwitcherContainer =
+        document.querySelector(".ol-layerswitcher");
+
+      if (layerSwitcherContainer) {
+        layerSwitcherContainer.appendChild(layerSwitcherButton);
+      } else {
+        console.error("Layer switcher container not found!");
+      }
     });
 
     const mousePositionControl = new MousePosition({
@@ -581,7 +1010,15 @@ const MapView = () => {
 
     const map = new Map({
       target: mapElement.current,
-      layers: [basemapGroup, mouzaWMS, wmsLayer, BasaltGroup, landGroup],
+      // layers: [],
+      layers: [
+        basemapGroup,
+        mouzaWMS,
+        wmsLayer,
+        BasaltGroup,
+        CoalGroup,
+        landGroup, // Add your drone image layer here
+      ],
       view: new View({
         center: fromLonLat([87.602577, 24.057537]),
         zoom: 14,
@@ -589,9 +1026,24 @@ const MapView = () => {
       }),
       controls: defaultControls().extend([
         new ScaleLine({ bar: true, text: true, minWidth: 125 }),
+        // new ScaleLine({
+        //     bar: true,
+        //     text: true,
+        //     minWidth: 125,
+        //     className: 'ol-scale-line ol-scale-combined'  // Custom class for styling
+        // }),
         new Zoom(),
         new ZoomSlider(),
-        new OverviewMap(),
+        new OverviewMap({
+          className: "ol-overviewmap ol-custom-overviewmap",
+          layers: [
+            new TileLayer({
+              source: new OSM(),
+            }),
+          ],
+          collapsed: false,
+          collapsible: false,
+        }),
         new FullScreen(),
         new LayerSwitcher({
           startActive: true,
@@ -631,10 +1083,92 @@ const MapView = () => {
       // );
 
       const activeLayers = [
+        // Basemap Group
+        // { layer: osmLayer, layerName: 'OSM Base Layer', condition: osmLayer.getVisible() },
+        // { layer: googleLayerSatellite, layerName: 'Google Satellite', condition: googleLayerSatellite.getVisible() },
+        // { layer: googleLayerRoadNames, layerName: 'Google Road Names', condition: googleLayerRoadNames.getVisible() },
+        // { layer: googleLayerRoadmap, layerName: 'Google Road Map', condition: googleLayerRoadmap.getVisible() },
+        // { layer: drone_image, layerName: 'Drone Image', condition: drone_image.getVisible() },
+
+        // Basalt Group
+        // { layer: balsalt_l, layerName: 'Basalt-326.76 Acres', condition: balsalt_l.getVisible() },
+        {
+          layer: vw_basalt_vested,
+          layerName: "Basalt-Vested Land",
+          condition: vw_basalt_vested.getVisible(),
+        },
+        {
+          layer: vw_basalt_rayati,
+          layerName: "Basalt-Rayati Land",
+          condition: vw_basalt_rayati.getVisible(),
+        },
+        {
+          layer: vw_basalt_partlypurchased,
+          layerName: "Basalt-Partly Purchased Land",
+          condition: vw_basalt_partlypurchased.getVisible(),
+        },
+        {
+          layer: vw_basalt_fullpurchased,
+          layerName: "Basalt-Fully Purchased Land",
+          condition: vw_basalt_fullpurchased.getVisible(),
+        },
+        {
+          layer: vw_basalt_ntapprove,
+          layerName: "Basalt-Cabinate Approved but Not Purchased",
+          condition: vw_basalt_ntapprove.getVisible(),
+        },
+        {
+          layer: vw_ba_partlypurchased,
+          layerName: "Basalt-Partly Purchased Land",
+          condition: vw_ba_partlypurchased.getVisible(),
+        },
+        // Coal Group
+        // { layer: coalLayer, layerName: 'Coal Blocks', condition: coalLayer.getVisible() },
+        {
+          layer: vw_coal_vested,
+          layerName: "Coal-Vested Land",
+          condition: vw_coal_vested.getVisible(),
+        },
+        {
+          layer: vw_coal_rayati,
+          layerName: "Coal-Rayati Land",
+          condition: vw_coal_rayati.getVisible(),
+        },
+        {
+          layer: vw_coal_partlypurchased,
+          layerName: "Coal-Partly Purchased Land",
+          condition: vw_coal_partlypurchased.getVisible(),
+        },
+        {
+          layer: vw_coal_fullpurchased,
+          layerName: "Coal-Fully Purchased Land",
+          condition: vw_coal_fullpurchased.getVisible(),
+        },
+        // {
+        //   layer: vw_coal_ntapprove,
+        //   layerName: "Coal-Cabinate Approved but Not Purchased",
+        //   condition: vw_coal_ntapprove.getVisible(),
+        // },
+        {
+          layer: vw_cl_partlypurchase,
+          layerName: "Coal-Partly Purchased Land",
+          condition: vw_cl_partlypurchase.getVisible(),
+        },
+        // Land Categories Group
         {
           layer: wmsLayer,
           layerName: "Land Records",
           condition: wmsLayer.getVisible(),
+        },
+        {
+          layer: vw_borehole,
+          layerName: "Borehole Points",
+          condition: vw_borehole.getVisible(),
+        },
+        {
+          layer: mouzaWMS,
+          layerName: "Mouza Boundary",
+          condition: mouzaWMS.getVisible(),
         },
         {
           layer: vestedLand,
@@ -666,11 +1200,11 @@ const MapView = () => {
           layerName: "Fully Purchased Land",
           condition: fullypurchasedLand.getVisible(),
         },
-        {
-          layer: notapprove,
-          layerName: "Cabinet approve but not purchased",
-          condition: notapprove.getVisible(),
-        },
+        // {
+        //   layer: notapprove,
+        //   layerName: "Cabinet Approved but Not Purchased",
+        //   condition: notapprove.getVisible(),
+        // },
       ].filter((layerInfo) => layerInfo.condition);
 
       const fetchLayerFeatureInfo = (layerInfo) => {

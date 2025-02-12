@@ -107,7 +107,6 @@ const DataTable = ({
       opacity: isPinned ? 0.95 : 1,
       position: isPinned ? "sticky" : "relative",
       width: column.getSize(),
-      zIndex: isPinned ? 1 : 0,
     };
   };
 

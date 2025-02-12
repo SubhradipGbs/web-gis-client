@@ -120,13 +120,12 @@ th {
 
 .dropdownFilter {
   position: absolute;
-  z-index: 1000;
+  /* z-index: 3000; */
   background: white;
   border-radius: 5px;
   padding: 10px;
   max-height: 200px;
   overflow-y: auto;
-
 }
 
 .dropdownBtn {
