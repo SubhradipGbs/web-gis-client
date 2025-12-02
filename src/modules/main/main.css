@@ -1,0 +1,20 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: calc(100vw - 250px);
+    background-color: #f8f9fa;
+    transition: all 0.3s;
+}
+
+.main-container:where(.collapsed) {
+    width: 100vw;
+}
+
+.content {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    transition: all 0.3s;
+}

@@ -1,0 +1,170 @@
+.data-table {
+  flex: grow 1;
+  width: 100%;
+}
+
+/* .table-container {
+  height: 75vh !important;
+  overflow: hidden !important;
+  overflow-y: scroll !important;
+} */
+
+.table-container {
+  overflow: auto;
+  height: 70vh;
+}
+
+.table-container thead th {
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+}
+
+/* Just common table stuff. Really. */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.page-button {
+  background-color: #125590;
+  color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-button[disabled] {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  border-color: #ccc;
+}
+
+.filterBtn {
+  background-color: #a41c32;
+  color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filterBtn[disabled] {
+  background-color: #cb9696;
+  color: #fff;
+  cursor: not-allowed;
+  border-color: #ccc;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.search-input {
+  border: none;
+  padding: 5px;
+  background: transparent;
+  margin-right: 20px;
+}
+
+.search-icon {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  margin-right: 10px;
+}
+
+.search-input:focus {
+  border: none;
+  outline: none;
+}
+
+.form-select {
+  max-width: 150px;
+}
+
+.form-select:focus {
+  outline: none !important;
+  border: none !important;
+}
+
+td {
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+th {
+  font-size: 0.8rem;
+}
+
+.dropdownFilter {
+  position: absolute;
+  /* z-index: 3000; */
+  background: white;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdownBtn {
+  background: #fff;
+  min-width: 100%;
+  padding: 2px 8px;
+  border: 1px solid #4F4F4F;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 15px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: l5 1s infinite linear alternate;
+}
+
+@keyframes l5 {
+  0% {
+    box-shadow: 20px 0 #000, -20px 0 #0002;
+    background: #000
+  }
+
+  33% {
+    box-shadow: 20px 0 #000, -20px 0 #0002;
+    background: #0002
+  }
+
+  66% {
+    box-shadow: 20px 0 #0002, -20px 0 #000;
+    background: #0002
+  }
+
+  100% {
+    box-shadow: 20px 0 #0002, -20px 0 #000;
+    background: #000
+  }
+}

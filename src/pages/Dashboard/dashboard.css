@@ -1,0 +1,68 @@
+.offcanvas-parent {
+    position: relative;
+}
+
+.custom-offcanvas {
+    position: absolute;
+    top: -5px;
+    right: 0;
+    width: 100%;
+    height: 0px;
+    background-color: #fff;
+    z-index: 100;
+    box-shadow: 10px 10px 6px -10px rgba(0, 0, 0, 0.36);
+    transition: height 0.5s ease;
+    border-radius: 8px;
+    padding: 5px;
+    display: flex;
+    overflow: hidden;
+}
+
+.offcanva-body {
+    height: 100%;
+    width: 100%;
+}
+
+.custom-offcanvas:where(.open) {
+    height: fit-content;
+}
+
+.info-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.5s ease;
+    min-width: 220px;
+    margin-top: 10px;
+}
+
+.color-box {
+    height: 25px;
+    width: 30px;
+}
+
+.color-box:where(.round) {
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+}
+
+.color-title {
+    font-size: 0.8rem;
+    margin: 0;
+    padding: 0;
+    color: #000;
+}
+
+.custom-offcanvas:not(.open) {
+    .info-box {
+        display: none;
+    }
+}
+
+/* .pattern-bg {
+    background-color: #e5e5f7;
+    opacity: 1;
+    background:
+        border: 1px solid #108f34;
+} */

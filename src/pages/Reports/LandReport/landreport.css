@@ -1,0 +1,49 @@
+/* tbody {
+  font-size: 0.85rem;
+} */
+/* .coulmn-header {
+  font-size: 0.85rem;
+} */
+/* .data-cell{
+    font-size: 10px !important;
+} */
+
+.table-btn {
+  padding: 0px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  border: none;
+  outline: none;
+  font-size: 1.2rem;
+}
+
+.page-btn {
+  background-color: #001F3D;
+  color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-btn[disabled] {
+  opacity: 0.8;
+}
+
+.btn[disabled],
+button[disabled] {
+  cursor: not-allowed !important;
+}
+
+.btn-close {
+  background-color: #fff !important;
+  border-radius: 50% !important;
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0px !important;
+}
