@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import MapWrapper from "../../Components/MapWrapper";
-import { Offcanvas } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { changeSideNav, toggleDrawer } from "../../store/reducers/ui";
 import MapViewer from "../../Components/MapVewer/MapViewer";

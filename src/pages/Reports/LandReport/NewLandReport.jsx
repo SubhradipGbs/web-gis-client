@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { lazy, Suspense, useMemo, useState } from "react";
 import "./landreport.css";
-import axios from "axios";
 import { FaInfoCircle } from "react-icons/fa";
 import { Modal } from "react-bootstrap";
+import apiClient from "../../../utils/apiClient";
 const DataTable = lazy(() => import("../../../Components/DataTable/DataTable"));
 
 const NewLandReport = () => {
@@ -225,7 +225,7 @@ const NewLandReport = () => {
   const { data: lands, isLoading } = useQuery({
     queryKey: ["newlandRecords"],
     queryFn: async () => {
-      const response = await axios.get(
+      const response = await apiClient.get(
         "/api/land/land-new"
       );
       return response.data;

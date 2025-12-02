@@ -22,8 +22,6 @@ import "ol-layerswitcher/dist/ol-layerswitcher.css";
 import { Group } from "ol/layer";
 import Modal from "react-modal";
 import { createStringXY } from "ol/coordinate";
-import Tile from "ol/layer/Tile";
-import { TileGrid } from "ol/tilegrid";
 
 class FeatureInfoControl extends Control {
   constructor(options) {

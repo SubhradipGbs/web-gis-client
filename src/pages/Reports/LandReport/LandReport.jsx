@@ -546,6 +546,7 @@ const LandReport = () => {
                 <h4 className='text-danger'>Error fetching data. Please try again later.</h4>
               </div>
             ) : (
+              lands &&
               <DataTable
                 data={lands}
                 columns={columns}
