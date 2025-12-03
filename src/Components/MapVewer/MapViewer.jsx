@@ -1097,16 +1097,16 @@ const MapView = () => {
         // }),
         new Zoom(),
         new ZoomSlider(),
-        new OverviewMap({
-          className: "ol-overviewmap ol-custom-overviewmap",
-          layers: [
-            new TileLayer({
-              source: new OSM(),
-            }),
-          ],
-          collapsed: false,
-          collapsible: false,
-        }),
+        // new OverviewMap({
+        //   className: "ol-overviewmap ol-custom-overviewmap",
+        //   layers: [
+        //     new TileLayer({
+        //       source: new OSM(),
+        //     }),
+        //   ],
+        //   collapsed: false,
+        //   collapsible: false,
+        // }),
         new FullScreen(),
         new LayerSwitcher({
           startActive: window.innerWidth > 768,
