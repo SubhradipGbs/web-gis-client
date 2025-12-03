@@ -13,8 +13,7 @@ const Sidebar = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-
-  console.log("User in Sidebar:", user);
+  
   const handleOkClick = () => {
     dispatch(userLogout());
     setShow(false);

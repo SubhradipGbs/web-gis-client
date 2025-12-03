@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   drawerOpen: false,
-  sideNavCollapse: false,
+  sideNavCollapse: window.innerWidth < 768 ? true : false,
 };
 
 export const uiSlice = createSlice({
@@ -16,7 +16,6 @@ export const uiSlice = createSlice({
       state.sideNavCollapse = !state.sideNavCollapse;
     },
     changeSideNav(state, action) {
-      console.log(action.payload);
       state.sideNavCollapse = action.payload;
     },
   },

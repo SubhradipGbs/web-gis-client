@@ -15,7 +15,7 @@ const MasterLand = () => {
     setInfo(row.original);
     console.log(row.original);
     setShow(true);
-  }
+  };
 
   const handleClose = () => setShow(false);
 
@@ -27,13 +27,14 @@ const MasterLand = () => {
       accessorFn: (row, index) => index + 1,
       sortable: true,
       cell: ({ row, getValue }) => (
-        <span className='d-flex justify-content-center align-items-center'>
+        <span className="d-flex justify-content-center align-items-center">
           <button
-            className='me-1 table-btn'
+            className="me-1 table-btn"
             onClick={() => {
               showInfo(row);
-            }}>
-            <FaInfoCircle color='#001F3D' opacity={0.8} />
+            }}
+          >
+            <FaInfoCircle color="#001F3D" opacity={0.8} />
           </button>
         </span>
       ),
@@ -357,12 +358,14 @@ const MasterLand = () => {
     },
   ];
 
-  const { data: lands, isLoading, isError } = useQuery({
+  const {
+    data: lands,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["master_land_records"],
     queryFn: async () => {
-      const response = await apiClient.get(
-        "/land/land-master"
-      );
+      const response = await apiClient.get("/land/land-master");
       return response.data;
     },
     staleTime: 2 * 60 * 1000,
@@ -370,22 +373,28 @@ const MasterLand = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-100 vh-100 d-flex justify-content-center align-items-center">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
     <div
       style={{
         width: "100%",
-      }}>
+      }}
+    >
       <h5>Master Land Records:</h5>
       <div>
         <Modal show={show} onHide={handleClose} centered size="lg" scrollable>
           <Modal.Header
             closeButton
-            className='text-light'
-            style={{ backgroundColor: "#001F3D" }}>
-            <div className='d-flex align-items-center gap-3'>
+            className="text-light"
+            style={{ backgroundColor: "#001F3D" }}
+          >
+            <div className="d-flex align-items-center gap-3">
               <FaInfoCircle size={30} />
               <h3>Land Information</h3>
             </div>
@@ -406,13 +415,20 @@ const MasterLand = () => {
                         console.log(key);
                         if (key === "owner") return null;
                         if (key === "sl_no") return null;
-                        if (value === null || value === undefined || value === "") return null;
+                        if (
+                          value === null ||
+                          value === undefined ||
+                          value === ""
+                        )
+                          return null;
                         return (
                           <tr key={key}>
-                            <td className="text-start fw-semibold">{infoObj[key]}</td>
+                            <td className="text-start fw-semibold">
+                              {infoObj[key]}
+                            </td>
                             <td className="text-start">{value}</td>
                           </tr>
-                        )
+                        );
                       })}
                     </tbody>
                   </table>
@@ -428,23 +444,26 @@ const MasterLand = () => {
           height: "100%",
           overflow: "hidden",
           overflowY: "scroll",
-        }}>
+        }}
+      >
         <Suspense
           fallback={
-            <div className='vh-100 w-100 d-flex justify-content-center align-items-center'>
-              <div className='loader'></div>
+            <div className="vh-100 w-100 d-flex justify-content-center align-items-center">
+              <div className="loader"></div>
             </div>
-          }>
-          {
-            isError ? (
-              <div className='vh-100 w-100 d-flex justify-content-center align-items-center'>
-                <h4 className='text-danger'>Error fetching data. Please try again later.</h4>
-              </div>
-            ) : (
-              lands &&
+          }
+        >
+          {isError ? (
+            <div className="vh-100 w-100 d-flex justify-content-center align-items-center">
+              <h4 className="text-danger">
+                Error fetching data. Please try again later.
+              </h4>
+            </div>
+          ) : (
+            lands && (
               <DataTable data={lands} columns={columns} sumRequired={false} />
             )
-          }
+          )}
         </Suspense>
       </div>
     </div>
@@ -455,7 +474,8 @@ export default MasterLand;
 
 const infoObj = {
   area_used_for: "Area Used For",
-  cabinet_approved_but_not_purchased: "Cabinet Approved but not Purchased (acre)",
+  cabinet_approved_but_not_purchased:
+    "Cabinet Approved but not Purchased (acre)",
   canp_status: "Cabinet Approved Status",
   category: "Category",
   category_area_acre: "Category Area (acre)",
@@ -473,8 +493,9 @@ const infoObj = {
   share: "Share",
   sl_no: "Sl No.",
   total_area_acre: "Total Area (acre)",
-  total_area_vested_rayati_forest_acre: "Total Area Vested/Rayati/Forest (acre)",
+  total_area_vested_rayati_forest_acre:
+    "Total Area Vested/Rayati/Forest (acre)",
   patta: "Patta",
   name_of_bargadar: "Name of Bargadar",
   bargad_share_area_acre: "Bargadar Share Area (acre)",
-}
+};

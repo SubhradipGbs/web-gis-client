@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Map } from "ol";
 import "ol/ol.css";
+import "./map.css";
 import { View } from "ol";
 import { Tile as TileLayer } from "ol/layer";
 import { OSM, TileWMS, TileImage } from "ol/source";
@@ -57,11 +58,9 @@ class FeatureInfoControl extends Control {
   }
 }
 
-console.log(`${(import.meta.env.VITE_GEOSERVER_URL)}/wms`);
-
 const MapView = () => {
   const mapElement = useRef(null);
-  const urlGeoServer = `${(import.meta.env.VITE_GEOSERVER_URL)}/wms`;
+  const urlGeoServer = `${import.meta.env.VITE_GEOSERVER_URL}/wms`;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [featuresData, setFeaturesData] = useState([]);
   const [coordinates, setCoordinates] = useState(null);
@@ -69,6 +68,7 @@ const MapView = () => {
   const mapRef = useRef(null);
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(0);
   const [currentFeatureLayer, setCurrentFeatureLayer] = useState("");
+  const [droneImgLoading, setDroneImgLoading] = useState(true);
 
   useEffect(() => {
     const style = document.createElement("style");
@@ -577,6 +577,24 @@ const MapView = () => {
         tileSize: 256,
       }),
       visible: true,
+    });
+
+    const droneSource = drone_image.getSource();
+    let counter = 0;
+
+    droneSource.on("imageloadstart", () => {
+      counter++;
+      setDroneImgLoading(true);
+    });
+
+    droneSource.on("imageloadend", () => {
+      counter--;
+      if (counter === 0) setDroneImgLoading(false);
+    });
+
+    droneSource.on("imageloaderror", () => {
+      counter--;
+      if (counter === 0) setDroneImgLoading(false);
     });
 
     const basemapGroup = new Group({
@@ -1091,7 +1109,7 @@ const MapView = () => {
         }),
         new FullScreen(),
         new LayerSwitcher({
-          startActive: true,
+          startActive: window.innerWidth > 768,
           groupSelectStyle: "children",
           reverse: true,
           activationMode: "click",
@@ -1313,6 +1331,10 @@ const MapView = () => {
       });
     };
 
+    drone_image.onload = () => {
+      console.log("Drone image layer loaded successfully.");
+    };
+
     map.on("click", handleMapClick);
 
     return () => {
@@ -1347,6 +1369,12 @@ const MapView = () => {
 
   return (
     <div>
+      {droneImgLoading && (
+        <div className="droneimageloader">
+          <div className="spinner"></div>
+          Loading drone image...
+        </div>
+      )}
       <div
         ref={mapElement}
         style={{
@@ -1357,7 +1385,7 @@ const MapView = () => {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        contentLabel='Plot Information'
+        contentLabel="Plot Information"
         style={{
           overlay: {
             backgroundColor: "rgba(0, 0, 0, 0.3)", // Softer overlay for a modern look
@@ -1379,40 +1407,45 @@ const MapView = () => {
             width: "90%",
             backgroundColor: "#fff", // White background for content
           },
-        }}>
+        }}
+      >
         <div
-          className='modal-header'
+          className="modal-header"
           style={{
             display: "flex",
             alignItems: "center",
             marginBottom: "20px",
-          }}>
-          <div className='modal-header-icon' style={{ marginRight: "10px" }}>
-            <div className='modal-header-icon' style={{ marginRight: "10px" }}>
+          }}
+        >
+          <div className="modal-header-icon" style={{ marginRight: "10px" }}>
+            <div className="modal-header-icon" style={{ marginRight: "10px" }}>
               <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='24'
-                height='24'
-                viewBox='0 0 24 24'
-                fill='none'
-                stroke='white'
-                stroke-width='2'
-                stroke-linecap='round'
-                stroke-linejoin='round'>
-                <path d='M12 2C8.13 2 5 5.13 5 9C5 13.53 12 21 12 21C12 21 19 13.53 19 9C19 5.13 15.87 2 12 2Z' />
-                <circle cx='12' cy='9' r='2' fill='#007bff' />
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 2C8.13 2 5 5.13 5 9C5 13.53 12 21 12 21C12 21 19 13.53 19 9C19 5.13 15.87 2 12 2Z" />
+                <circle cx="12" cy="9" r="2" fill="#007bff" />
               </svg>
             </div>
           </div>
           <div>
             <h2
-              className='modal-title'
-              style={{ color: "white", fontSize: "1.5rem", margin: 0 }}>
+              className="modal-title"
+              style={{ color: "white", fontSize: "1.5rem", margin: 0 }}
+            >
               Plot Information
             </h2>
             <p
-              className='modal-subtitle'
-              style={{ color: "white", fontSize: "0.9rem" }}>
+              className="modal-subtitle"
+              style={{ color: "white", fontSize: "0.9rem" }}
+            >
               View and navigate through the plot records
             </p>
           </div>
@@ -1421,21 +1454,23 @@ const MapView = () => {
         {featuresData.length > 0 ? (
           <>
             <div
-              className='feature-records-nav'
+              className="feature-records-nav"
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
                 marginBottom: "20px",
-              }}>
+              }}
+            >
               <span
-                className='feature-records-count'
-                style={{ fontSize: "0.9rem", color: "#555" }}>
+                className="feature-records-count"
+                style={{ fontSize: "0.9rem", color: "#555" }}
+              >
                 Record {selectedFeatureIndex + 1} of {featuresData.length}
               </span>
               <div>
                 <button
-                  className='pagination-button'
+                  className="pagination-button"
                   onClick={() =>
                     setSelectedFeatureIndex((prev) => Math.max(0, prev - 1))
                   }
@@ -1450,11 +1485,12 @@ const MapView = () => {
                     cursor:
                       selectedFeatureIndex === 0 ? "not-allowed" : "pointer",
                     marginRight: "8px",
-                  }}>
+                  }}
+                >
                   Previous
                 </button>
                 <button
-                  className='pagination-button'
+                  className="pagination-button"
                   onClick={() =>
                     setSelectedFeatureIndex((prev) =>
                       Math.min(featuresData.length - 1, prev + 1)
@@ -1472,7 +1508,8 @@ const MapView = () => {
                       selectedFeatureIndex === featuresData.length - 1
                         ? "not-allowed"
                         : "pointer",
-                  }}>
+                  }}
+                >
                   Next
                 </button>
               </div>
@@ -1480,8 +1517,9 @@ const MapView = () => {
 
             <div style={{ overflowX: "auto" }}>
               <table
-                className='records-table'
-                style={{ width: "100%", borderCollapse: "collapse" }}>
+                className="records-table"
+                style={{ width: "100%", borderCollapse: "collapse" }}
+              >
                 <thead>
                   <tr>
                     <th
@@ -1491,7 +1529,8 @@ const MapView = () => {
                         color: "#007bff",
                         fontSize: "1rem",
                         fontWeight: "600",
-                      }}>
+                      }}
+                    >
                       Field
                     </th>
                     <th
@@ -1501,7 +1540,8 @@ const MapView = () => {
                         color: "#007bff",
                         fontSize: "1rem",
                         fontWeight: "600",
-                      }}>
+                      }}
+                    >
                       Value
                     </th>
                   </tr>
@@ -1515,7 +1555,8 @@ const MapView = () => {
                             fontWeight: "500",
                             padding: "8px 10px",
                             color: "#333",
-                          }}>
+                          }}
+                        >
                           {formatFieldName(key)}
                         </td>
                         <td style={{ padding: "8px 10px", color: "#333" }}>
@@ -1535,7 +1576,7 @@ const MapView = () => {
         )}
 
         <button
-          className='close-button'
+          className="close-button"
           onClick={closeModal}
           style={{
             backgroundColor: "#ff4d4d",
@@ -1549,7 +1590,8 @@ const MapView = () => {
             display: "block",
             marginLeft: "auto",
             marginRight: "auto",
-          }}>
+          }}
+        >
           Close
         </button>
       </Modal>

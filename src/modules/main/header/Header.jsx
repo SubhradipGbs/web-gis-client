@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import "./header.css";
-import { LuLogOut } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../../../store/reducers/auth";
 import { FaBars, FaUser } from "react-icons/fa";
 import MapHeader from "../../../Components/MapHeader/MapHeader";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import { toggleSideNav } from "../../../store/reducers/ui";
 import { FaPowerOff } from "react-icons/fa6";
 import { Modal } from "react-bootstrap";
@@ -87,7 +85,7 @@ const Header = () => {
             <FaUser size={18} color='#001f3d' />
           </div>
           <span>
-            <p className='m-0' style={{ textTransform: "capitalize" }}>
+            <p className='m-0 d-none lg:d-block' style={{ textTransform: "capitalize" }}>
               {user?.name}
             </p>
           </span>

@@ -16,7 +16,7 @@ const OverlayComp = ({ info }) => {
   return (
     <>
       <span ref={ref}>{getValue()}</span>
-      <Overlay show={row.getIsExpanded()} target={ref} placement='bottom'>
+      <Overlay show={row.getIsExpanded()} target={ref} placement="bottom">
         <Popover>
           <Popover.Body>
             <ListGroup>
@@ -38,8 +38,6 @@ const LandReport = () => {
   const targetRef = useRef(null);
   const [info, setInfo] = useState(null);
 
-
-
   const showInfo = (row) => {
     // setOwnerInfo(row.original.owner);
     // console.log(row.original);
@@ -55,13 +53,14 @@ const LandReport = () => {
       accessorFn: (row, index) => index + 1,
       sortable: true,
       cell: ({ row, getValue }) => (
-        <span className='d-flex justify-content-center align-items-center'>
+        <span className="d-flex justify-content-center align-items-center">
           <button
-            className='me-1 table-btn'
+            className="me-1 table-btn"
             onClick={() => {
               showInfo(row);
-            }}>
-            <FaInfoCircle color='#001F3D' opacity={0.8} />
+            }}
+          >
+            <FaInfoCircle color="#001F3D" opacity={0.8} />
           </button>
         </span>
       ),
@@ -219,15 +218,16 @@ const LandReport = () => {
       id: "expander",
       header: () => null,
       cell: ({ row, getValue }) => (
-        <span className='d-flex justify-content-center align-items-center'>
+        <span className="d-flex justify-content-center align-items-center">
           {row.getCanExpand() && row.original?.owner.length > 1 ? (
             <button
-              className='me-1 table-btn'
-              onClick={row.getToggleExpandedHandler()}>
+              className="me-1 table-btn"
+              onClick={row.getToggleExpandedHandler()}
+            >
               {row.getIsExpanded() ? (
-                <FaChevronCircleUp color='#001F3D' opacity={0.8} />
+                <FaChevronCircleUp color="#001F3D" opacity={0.8} />
               ) : (
-                <FaChevronCircleDown color='#001F3D' opacity={0.8} />
+                <FaChevronCircleDown color="#001F3D" opacity={0.8} />
               )}
             </button>
           ) : null}
@@ -305,12 +305,14 @@ const LandReport = () => {
     },
   ];
 
-  const { data: lands, isLoading, isError } = useQuery({
+  const {
+    data: lands,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["landRecords"],
     queryFn: async () => {
-      const response = await apiClient.get(
-        "/land/land-all"
-      );
+      const response = await apiClient.get("/land/land-all");
       return response.data;
     },
     staleTime: 2 * 60 * 1000,
@@ -337,14 +339,19 @@ const LandReport = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-100 vh-100 d-flex justify-content-center align-items-center">
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
     <div
       style={{
         width: "100%",
-      }}>
+      }}
+    >
       <h5>Land Records</h5>
       <div>
         {/* <Modal show={openModal} onHide={() => setOpenModal(false)} centered>
@@ -492,12 +499,13 @@ const LandReport = () => {
         </Overlay> */}
       </div>
       <div>
-        <Modal show={openModal} onHide={closeModal} centered >
+        <Modal show={openModal} onHide={closeModal} centered>
           <Modal.Header
             closeButton
-            className='text-light'
-            style={{ backgroundColor: "#001F3D" }}>
-            <div className='d-flex align-items-center gap-3'>
+            className="text-light"
+            style={{ backgroundColor: "#001F3D" }}
+          >
+            <div className="d-flex align-items-center gap-3">
               <FaInfoCircle size={30} />
               <h3>Land Information</h3>
             </div>
@@ -517,13 +525,20 @@ const LandReport = () => {
                       {Object.entries(info).map(([key, value]) => {
                         console.log(key);
                         if (key === "owner") return null;
-                        if (value === null || value === undefined || value === "") return null;
+                        if (
+                          value === null ||
+                          value === undefined ||
+                          value === ""
+                        )
+                          return null;
                         return (
                           <tr key={key}>
-                            <td className="text-start fw-semibold">{infoObj[key]}</td>
+                            <td className="text-start fw-semibold">
+                              {infoObj[key]}
+                            </td>
                             <td className="text-start">{value}</td>
                           </tr>
-                        )
+                        );
                       })}
                     </tbody>
                   </table>
@@ -536,27 +551,29 @@ const LandReport = () => {
       <div style={{ width: "100%" }}>
         <Suspense
           fallback={
-            <div className='vh-100 w-100 d-flex justify-content-center align-items-center'>
-              <div className='loader'></div>
+            <div className="vh-100 w-100 d-flex justify-content-center align-items-center">
+              <div className="loader"></div>
             </div>
-          }>
-          {
-            isError ? (
-              <div className='vh-100 w-100 d-flex justify-content-center align-items-center'>
-                <h4 className='text-danger'>Error fetching data. Please try again later.</h4>
-              </div>
-            ) : (
-              lands &&
+          }
+        >
+          {isError ? (
+            <div className="vh-100 w-100 d-flex justify-content-center align-items-center">
+              <h4 className="text-danger">
+                Error fetching data. Please try again later.
+              </h4>
+            </div>
+          ) : (
+            lands && (
               <DataTable
                 data={lands}
                 columns={columns}
-                plotId='plot_id'
-                areaId='total_area_in_acres'
+                plotId="plot_id"
+                areaId="total_area_in_acres"
                 sumRequired
-              // columnPinning={pinnedColumn}
+                // columnPinning={pinnedColumn}
               />
             )
-          }
+          )}
         </Suspense>
       </div>
     </div>
@@ -585,4 +602,4 @@ const infoObj = {
   bargadar_name: "Bargadar Name",
   barga_share_area_in_acres: "Barga Share Area in Acres",
   plotno: "Plot No",
-}
+};

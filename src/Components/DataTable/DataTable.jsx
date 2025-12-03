@@ -99,8 +99,8 @@ const DataTable = ({
       boxShadow: isLastLeftPinnedColumn
         ? "-4px 0 4px -4px gray inset"
         : isFirstRightPinnedColumn
-          ? "4px 0 4px -4px gray inset"
-          : undefined,
+        ? "4px 0 4px -4px gray inset"
+        : undefined,
       left:
         isPinned === "left" ? `${column.getStart("left") - 1}px` : undefined,
       right: isPinned === "right" ? `${column.getAfter("right")}px` : undefined,
@@ -156,8 +156,8 @@ const DataTable = ({
         const footerValue =
           col.columnDef.footer && typeof col.columnDef.footer === "function"
             ? col.columnDef.footer({
-              table,
-            })
+                table,
+              })
             : "";
 
         row[columnHeaderMap[accessorKey]] = footerValue;
@@ -236,93 +236,28 @@ const DataTable = ({
   };
 
   return (
-    <div className='data-table'>
-      <div className='w-100 d-flex gap-3 justify-content-between align-items-center my-2'>
-        <div className='d-flex gap-3 align-items-center flex-wrap'></div>
-      </div>
-
-      <div className='d-flex flex-column flex-md-row justify-content-start justify-content-md-between align-items-start align-items-md-center'>
-        <div>
+    <div className="data-table">
+      <div className="d-flex flex-column flex-md-row justify-content-start justify-content-md-between align-items-start align-items-md-center mb-1">
+        <div className="flex-grow-1 d-flex flex-row justify-content-between align-items-center gap-2 me-1">
           {/* {sumRequired && (
             <h6 className='fw-bold'>Total Area : {totalArea} acre</h6>
           )} */}
-          <div className='search-box'>
+          <div className="search-box">
             <input
-              className='search-input'
-              placeholder='Search...'
+              className="search-input"
+              placeholder="Search..."
               onChange={(e) => handleSearchChange(e.target.value)}
             />
-            <HiMiniMagnifyingGlass className='search-icon' />
+            <HiMiniMagnifyingGlass className="search-icon" />
           </div>
-        </div>
-        <div className='d-flex align-items-center gap-2'>
-          <div>
-            <button
-              className='filterBtn'
-              onClick={toggleFilterOpen}
-              disabled={columnfilterd.length == 0}>
-              Clear <RiFilterOffFill size={16} />
-            </button>
-          </div>
-          {table.getCoreRowModel().rows.length > 0 && (
-            <div className='pagination my-2'>
-              <div style={{ width: "100px" }}>
-                <select
-                  className='form-select form-select-sm'
-                  value={table.getState().pagination.pageSize}
-                  onChange={(e) => {
-                    table.setPageSize(Number(e.target.value));
-                  }}>
-                  {[25, 50, 100, 200].map((pageSize) => (
-                    <option key={pageSize} value={pageSize}>
-                      {pageSize}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className='d-none d-md-block'>Page: </div>
-              <strong>
-                {table.getState().pagination.pageIndex + 1}/{" "}
-                {table.getPageCount().toLocaleString()}
-              </strong>
-              <button
-                className='page-button'
-                onClick={() => {
-                  table.firstPage();
-                }}
-                disabled={!table.getCanPreviousPage()}>
-                First
-              </button>
-              <button
-                className='page-button'
-                disabled={!table.getCanPreviousPage()}
-                onClick={() => {
-                  table.previousPage();
-                }}>
-                Prev
-              </button>
-              <button className='btn btn-sm'>
-                {table.getState().pagination.pageIndex + 1}
-              </button>
-              <button
-                className='page-button'
-                disabled={!table.getCanNextPage()}
-                onClick={() => {
-                  table.nextPage();
-                }}>
-                Next
-              </button>
-              <button
-                className='page-button'
-                disabled={!table.getCanNextPage()}
-                onClick={() => {
-                  table.lastPage();
-                }}>
-                Last
-              </button>
-            </div>
-          )}
-          <div>
+          <button
+            className="filterBtn"
+            onClick={toggleFilterOpen}
+            disabled={columnfilterd.length == 0}
+          >
+            <RiFilterOffFill size={16} /> Clear
+          </button>
+          <div className="d-block d-md-none">
             <Dropdown>
               <Dropdown.Toggle className='page-button d-flex align-items-center gap-2 py-2'>
                 <FaDownload />
@@ -339,11 +274,92 @@ const DataTable = ({
             </Dropdown>
           </div>
         </div>
+        <div className="d-flex align-items-center gap-2">
+          {table.getCoreRowModel().rows.length > 0 && (
+            <div className="pagination my-2">
+              <div style={{ width: "100px" }}>
+                <select
+                  className="form-select form-select-sm"
+                  value={table.getState().pagination.pageSize}
+                  onChange={(e) => {
+                    table.setPageSize(Number(e.target.value));
+                  }}
+                >
+                  {[25, 50, 100, 200].map((pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                      {pageSize}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="d-none md:d-block">Page: </div>
+              <strong className="d-none d-md-block">
+                {table.getState().pagination.pageIndex + 1}/{" "}
+                {table.getPageCount().toLocaleString()}
+              </strong>
+              <button
+                className="page-button"
+                onClick={() => {
+                  table.firstPage();
+                }}
+                disabled={!table.getCanPreviousPage()}
+              >
+                First
+              </button>
+              <button
+                className="page-button"
+                disabled={!table.getCanPreviousPage()}
+                onClick={() => {
+                  table.previousPage();
+                }}
+              >
+                Prev
+              </button>
+              <button className="btn btn-sm">
+                {table.getState().pagination.pageIndex + 1}
+              </button>
+              <button
+                className="page-button"
+                disabled={!table.getCanNextPage()}
+                onClick={() => {
+                  table.nextPage();
+                }}
+              >
+                Next
+              </button>
+              <button
+                className="page-button"
+                disabled={!table.getCanNextPage()}
+                onClick={() => {
+                  table.lastPage();
+                }}
+              >
+                Last
+              </button>
+            </div>
+          )}
+          <div className="d-none d-md-block">
+            <Dropdown>
+              <Dropdown.Toggle className="page-button d-flex align-items-center gap-2 py-2">
+                <FaDownload />
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => exportData("excel")}>
+                  Excel
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => exportData("csv")}>
+                  CSV
+                </Dropdown.Item>
+                {/* <Dropdown.Item onClick={() => exportPdf()}>PDF</Dropdown.Item> */}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </div>
       </div>
 
-      <div className='table-container'>
-        <Table striped bordered size='sm' style={{ fontSize: "0.85rem" }}>
-          <thead className='table-active'>
+      <div className="table-container">
+        <Table striped bordered size="sm" style={{ fontSize: "0.85rem" }}>
+          <thead className="table-active">
             {table.getHeaderGroups().map((headergrp) => (
               <tr key={headergrp.id}>
                 {headergrp.headers.map((header) => (
@@ -352,16 +368,19 @@ const DataTable = ({
                     colSpan={header.colSpan}
                     style={{
                       ...getCommonPinningStyles(header.column),
-                      verticalAlign: `${header.column.getCanFilter() ? "middle" : "top"
-                        }`,
+                      verticalAlign: `${
+                        header.column.getCanFilter() ? "middle" : "top"
+                      }`,
                       whiteSpace: "nowrap",
                       cursor: "pointer",
                       backgroundColor: "#E5E5E5",
                     }}
-                    className='px-2 cursor-pointer table-active'>
+                    className="px-2 cursor-pointer table-active"
+                  >
                     <span
-                      className='d-flex justify-content-between align-items-center gap-2 mb-1'
-                      onClick={header.column.getToggleSortingHandler()}>
+                      className="d-flex justify-content-between align-items-center gap-2 mb-1"
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
                       {header.column.columnDef.header}
                       <span
                       // className='d-flex gap-2 align-items-center flex-grow-1'
@@ -416,7 +435,8 @@ const DataTable = ({
                         whiteSpace: "nowrap",
                         ...getCommonPinningStyles(cell.column),
                         height: "100%",
-                      }}>
+                      }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -428,19 +448,23 @@ const DataTable = ({
                   row.original.owner.map((item) => (
                     <tr
                       key={item.lr_khatian_no}
-                      style={{ backgroundColor: "#9DC08B !important" }}>
+                      style={{ backgroundColor: "#9DC08B !important" }}
+                    >
                       <td
                         colSpan={1}
-                        style={{ backgroundColor: "#9DC08B" }}></td>
+                        style={{ backgroundColor: "#9DC08B" }}
+                      ></td>
                       <td
                         colSpan={8}
-                        style={{ backgroundColor: "#9DC08B" }}></td>
+                        style={{ backgroundColor: "#9DC08B" }}
+                      ></td>
                       <td colSpan={1} style={{ backgroundColor: "#9DC08B" }}>
                         {item.owner_name_or_raiayat}
                       </td>
                       <td
                         colSpan={1}
-                        style={{ backgroundColor: "#9DC08B" }}></td>
+                        style={{ backgroundColor: "#9DC08B" }}
+                      ></td>
                       <td colSpan={1} style={{ backgroundColor: "#9DC08B" }}>
                         {item.lr_khatian_no}
                       </td>
@@ -452,7 +476,8 @@ const DataTable = ({
                       </td>
                       <td
                         colSpan={row.getVisibleCells().length - 14}
-                        style={{ backgroundColor: "#9DC08B" }}></td>
+                        style={{ backgroundColor: "#9DC08B" }}
+                      ></td>
                     </tr>
                   ))}
               </Fragment>
@@ -460,7 +485,7 @@ const DataTable = ({
             {!data.length ||
               (table.getFilteredRowModel().rows.length == 0 && (
                 <tr>
-                  <td className='p-2 text-left' colSpan={columns.length}>
+                  <td className="p-2 text-left" colSpan={columns.length}>
                     No records found
                   </td>
                 </tr>
@@ -469,9 +494,9 @@ const DataTable = ({
           <tfoot>
             {!!table.getFooterGroups() &&
               table.getFooterGroups().map((footerGrp) => (
-                <tr key={footerGrp.id} className='table-active'>
+                <tr key={footerGrp.id} className="table-active">
                   {footerGrp.headers.map((header) => (
-                    <td className='fw-bold' key={header.id}>
+                    <td className="fw-bold" key={header.id}>
                       {flexRender(
                         header.column.columnDef.footer,
                         header.getContext()
@@ -485,14 +510,15 @@ const DataTable = ({
       </div>
 
       {table.getCoreRowModel().rows.length > 0 && (
-        <div className='pagination my-2'>
+        <div className="pagination my-2">
           <div style={{ width: "100px" }}>
             <select
-              className='form-select select-sm'
+              className="form-select select-sm"
               value={table.getState().pagination.pageSize}
               onChange={(e) => {
                 table.setPageSize(Number(e.target.value));
-              }}>
+              }}
+            >
               {[25, 50, 100, 200].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   {pageSize}
@@ -500,46 +526,50 @@ const DataTable = ({
               ))}
             </select>
           </div>
-          <div className='d-none d-md-block'>Page: </div>
-          <strong>
+          <div className="d-none d-md-block">Page: </div>
+          <strong className="d-none d-md-block">
             {table.getState().pagination.pageIndex + 1}/{" "}
             {table.getPageCount().toLocaleString()}
           </strong>
           <button
-            className='page-button'
+            className="page-button"
             onClick={() => {
               table.firstPage();
             }}
-            disabled={!table.getCanPreviousPage()}>
+            disabled={!table.getCanPreviousPage()}
+          >
             First
           </button>
           <button
-            className='page-button'
+            className="page-button"
             disabled={!table.getCanPreviousPage()}
             onClick={() => {
               table.previousPage();
-            }}>
+            }}
+          >
             Prev
           </button>
-          <button className='btn btn-sm'>
+          <button className="btn btn-sm">
             {table.getState().pagination.pageIndex + 1}
           </button>
           <button
-            className='page-button'
+            className="page-button"
             disabled={!table.getCanNextPage()}
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
               table.nextPage();
-            }}>
+            }}
+          >
             Next
           </button>
           <button
-            className='page-button'
+            className="page-button"
             disabled={!table.getCanNextPage()}
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
               table.lastPage();
-            }}>
+            }}
+          >
             Last
           </button>
         </div>
@@ -569,8 +599,8 @@ function Filter({ column }) {
       filterVariant === "range"
         ? []
         : Array.from(column.getFacetedUniqueValues().keys())
-          .sort()
-          .slice(0, 5000),
+            .sort()
+            .slice(0, 5000),
     [column.getFacetedUniqueValues(), filterVariant]
   );
   const checkBoxValues = useMemo(
@@ -583,44 +613,47 @@ function Filter({ column }) {
 
   return filterVariant === "range" ? (
     <div>
-      <div className='flex space-x-2'>
+      <div className="flex space-x-2">
         <DebouncedInput
-          type='number'
+          type="number"
           min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
           max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
           value={columnFilterValue?.[0] ?? ""}
           onChange={(value) =>
             column.setFilterValue((old) => [value, old?.[1]])
           }
-          placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] !== undefined
-            ? `(${column.getFacetedMinMaxValues()?.[0]})`
-            : ""
-            }`}
-          className='w-24 border shadow rounded'
+          placeholder={`Min ${
+            column.getFacetedMinMaxValues()?.[0] !== undefined
+              ? `(${column.getFacetedMinMaxValues()?.[0]})`
+              : ""
+          }`}
+          className="w-24 border shadow rounded"
         />
         <DebouncedInput
-          type='number'
+          type="number"
           min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
           max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
           value={columnFilterValue?.[1] ?? ""}
           onChange={(value) =>
             column.setFilterValue((old) => [old?.[0], value])
           }
-          placeholder={`Max ${column.getFacetedMinMaxValues()?.[1]
-            ? `(${column.getFacetedMinMaxValues()?.[1]})`
-            : ""
-            }`}
-          className='w-24 border shadow rounded'
+          placeholder={`Max ${
+            column.getFacetedMinMaxValues()?.[1]
+              ? `(${column.getFacetedMinMaxValues()?.[1]})`
+              : ""
+          }`}
+          className="w-24 border shadow rounded"
         />
       </div>
-      <div className='h-1' />
+      <div className="h-1" />
     </div>
   ) : filterVariant === "select" ? (
     <select
       style={{ minWidth: "100%" }}
       onChange={(e) => column.setFilterValue(e.target.value)}
-      value={columnFilterValue?.toString() || ""}>
-      <option value=''>All</option>
+      value={columnFilterValue?.toString() || ""}
+    >
+      <option value="">All</option>
       {sortedUniqueValues.map((value) => (
         <option value={value} key={value}>
           {value || "NIL"}
@@ -630,23 +663,25 @@ function Filter({ column }) {
   ) : filterVariant === "checkbox" ? (
     <div style={{ position: "relative" }}>
       <button
-        className='dropdownBtn'
-        onClick={() => setShowDropdown((prev) => !prev)}>
+        className="dropdownBtn"
+        onClick={() => setShowDropdown((prev) => !prev)}
+      >
         Choose an option
         <FaChevronDown />
       </button>
       {showDropdown && (
-        <div className='dropdownFilter w-100 shadow p-1'>
+        <div className="dropdownFilter w-100 shadow p-1">
           <label
             style={{
               display: "block",
               marginBottom: "5px",
               fontSize: "0.7rem",
               verticalAlign: "middle",
-            }}>
+            }}
+          >
             <input
-              className='me-1'
-              type='checkbox'
+              className="me-1"
+              type="checkbox"
               checked={
                 columnFilterValue?.length == sortedUniqueValues?.length || false
               }
@@ -668,10 +703,11 @@ function Filter({ column }) {
                 fontSize: "0.7rem",
                 verticalAlign: "middle",
                 whiteSpace: "nowrap",
-              }}>
+              }}
+            >
               <input
-                className='me-1'
-                type='checkbox'
+                className="me-1"
+                type="checkbox"
                 checked={columnFilterValue?.includes(value) || false}
                 onChange={(e) => {
                   const isChecked = e.target.checked;
@@ -691,13 +727,13 @@ function Filter({ column }) {
   ) : (
     <>
       <DebouncedInput
-        type='text'
+        type="text"
         value={columnFilterValue ?? ""}
         onChange={(value) => column.setFilterValue(value)}
         placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
         list={column.id + "list"}
       />
-      <div className='h-1' />
+      <div className="h-1" />
     </>
   );
 }
