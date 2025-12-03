@@ -510,7 +510,7 @@ const DataTable = ({
       </div>
 
       {table.getCoreRowModel().rows.length > 0 && (
-        <div className="pagination my-2">
+        <div className="pagination justify-content-start justify-content-md-end my-2">
           <div style={{ width: "100px" }}>
             <select
               className="form-select select-sm"

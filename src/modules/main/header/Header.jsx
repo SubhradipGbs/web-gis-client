@@ -67,9 +67,9 @@ const Header = () => {
         </button>
       </div>
 
-      <div className='d-flex justify-content-center flex-grow-1'>
-        <h5 className='text-light'>
-          Deucha Land Information Management System
+      <div className='d-flex justify-content-center align-items-center flex-grow-1'>
+        <h5 className='text-light align-middle m-0'>
+          Deucha Land Information <span className="d-none d-md-inline">Management System</span>
         </h5>
       </div>
       {location.pathname == "/" && (

@@ -1083,8 +1083,8 @@ const MapView = () => {
         landGroup, // Add your drone image layer here
       ],
       view: new View({
-        center: fromLonLat([87.602577, 24.057537]),
-        zoom: 14,
+        center: fromLonLat([87.598285, 24.059653]),
+        zoom: window.innerWidth > 768 ? 14 : 13,
         constrainRotation: true,
       }),
       controls: defaultControls().extend([
