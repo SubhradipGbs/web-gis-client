@@ -70,29 +70,33 @@ export const demoMenu = [
 ];
 
 export const colorCodes = [
-  {
-    title: "12 Acres Basalt",
-    color: "#ffffff",
-    border: "#F3B1A6",
-  },
-  { title: "Basalt Boundary", color: "#ffffff", border: "#000033" },
-  { title: "Coal Boundary", color: "#FFFFFF", border: "#FF0000" },
+  // {
+  //   title: "12 Acres Basalt",
+  //   color: "#ffffff",
+  //   border: "#F3B1A6",
+  // },
+  { title: "Basalt Boundary", color: "#ffffff", border: "#6FFF54" , class: "border-3"},
+  { title: "Coal Boundary", color: "#FFFFFF", border: "#FF0000", class: "border-3" },
   { title: "Borehole", color: "#40ff00", border: "#00b29d", class: "round" },
   {
     title: "Fully Purchased",
     color:
-      "repeating-linear-gradient(0deg, #ffffff 0, #ffffff 20%, transparent 0, transparent 50%),repeating-linear-gradient(135deg, #76ad7f 0, #76ad7f 5%, transparent 0, transparent 30%)",
-    border: "#608a67",
+      "repeating-linear-gradient( -45deg, #00FF00, #00FF00 2px, #ffffff 2px, #ffffff 10px )",
+    border: "#00FF00",
+    class: "border-3",
   },
 
-  { title: "Partly Purchased Land", color: "#F1C9C3", border: "#54466D" },
-  { title: "Partly Purchased Portion", color: "#063970", border: "#8B0000" },
-  { title: "Forest Land", color: "#228B22", border: "#006400" },
-  { title: "Other's Land", color: "#ADD8E6", border: "#8B0000" },
-  { title: "Vested Land", color: "#FFD700", border: "#B8860B" },
-  { title: "Rayati Land", color: "#D2DCF3", border: "#84878E" },
-  { title: "Land records", color: "lightgray", border: "#000000" },
+  { title: "Partly Purchased", color: "#FFC0CB", border: "#640064", class:"border-3" },
+  { title: "Forest Land", color: "rgba(34, 139, 34, 0.7)", border: "#006400", class: "border-3" },
+  { title: "Other's Land", color: "#E8F4F8", border: "#2C5F7D", class: "border-3" },
+  { title: "Vested Land", color: "rgba(123, 104, 238, 1)", border: "rgba(255, 107, 53, 0.95)", class: "border-3" },
+  { title: "Rayati Land", color: "#9dbdff", border: "#000000", class: "border-3" },
+  { title: "Land records", color: "lightgray", border: "#000000", class: "border-3" },
 ];
+
+// background-color: #e5e5f7;
+// opacity: 0.8;
+// background: repeating-linear-gradient( -45deg, #00FF00, #00FF00 2px, #e5e5f7 2px, #e5e5f7 10px );
 
 // background-color: #e5e5f7;
 // opacity: 0.8;

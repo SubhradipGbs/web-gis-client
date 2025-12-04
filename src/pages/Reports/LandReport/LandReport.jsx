@@ -143,8 +143,11 @@ const LandReport = () => {
       accessorKey: "total_area_in_acres",
       sortable: true,
       cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
+      enableGlobalFilter: false,
       enableColumnFilter: true,
+      // meta:{
+      //   filterVariant: "range",
+      // },
       footer: (info) => {
         const total = info.table
           .getFilteredRowModel()
@@ -260,7 +263,7 @@ const LandReport = () => {
       accessorKey: "owner_share_in_plot",
       sortable: true,
       cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
+      enableGlobalFilter: false,
       enableColumnFilter: false,
       footer: () => null,
     },
@@ -270,7 +273,7 @@ const LandReport = () => {
       accessorKey: "area_owned_in_acres",
       sortable: true,
       cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
+      enableGlobalFilter: false,
       enableColumnFilter: true,
       footer: (info) => {
         const total = info.table
@@ -289,17 +292,17 @@ const LandReport = () => {
       accessorKey: "distance_from_nh_meters",
       sortable: true,
       cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
+      enableGlobalFilter: false,
       enableColumnFilter: false,
       footer: () => null,
     },
     {
       id: "distance_from_metalled_road_meters",
-      header: "Distance from Metalled Read(m)",
+      header: "Distance from Metalled Road(m)",
       accessorKey: "distance_from_metalled_road_meters",
       sortable: true,
       cell: (info) => info.getValue(),
-      enableGlobalFilter: true,
+      enableGlobalFilter: false,
       enableColumnFilter: false,
       footer: () => null,
     },

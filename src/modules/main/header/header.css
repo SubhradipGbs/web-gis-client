@@ -7,4 +7,12 @@
   background-color: #001f3d;
   border-bottom: 1px solid #e9ecef;
   color: #fff;
+  overflow: hidden;
+  /* position: relative; */
 }
+/* 
+.user_info{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+} */

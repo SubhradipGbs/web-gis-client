@@ -627,7 +627,6 @@ function Filter({ column }) {
               ? `(${column.getFacetedMinMaxValues()?.[0]})`
               : ""
           }`}
-          className="w-24 border shadow rounded"
         />
         <DebouncedInput
           type="number"
@@ -642,7 +641,6 @@ function Filter({ column }) {
               ? `(${column.getFacetedMinMaxValues()?.[1]})`
               : ""
           }`}
-          className="w-24 border shadow rounded"
         />
       </div>
       <div className="h-1" />

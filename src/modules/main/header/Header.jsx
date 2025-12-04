@@ -31,45 +31,49 @@ const Header = () => {
   };
 
   return (
-    <div className='header'>
+    <div className="header">
       <Modal show={show} onHide={() => setShow(false)} centered>
         <Modal.Header
-          className='bg-danger text-light'
+          className="bg-danger text-light"
           closeButton
-          style={{ borderBottom: "none", color: "#ff0000" }}>
+          style={{ borderBottom: "none", color: "#ff0000" }}
+        >
           <Modal.Title>Are you sure?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className='d-flex flex-column'>
+          <div className="d-flex flex-column">
             {/* <h5>Are you sure?</h5> */}
             <p>Do you want to logout?</p>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div className='d-flex justify-content-end gap-2'>
-            <button className='btn btn-sm btn-danger' onClick={handleOkClick}>
-              <FaPowerOff className='me-1' />
+          <div className="d-flex justify-content-end gap-2">
+            <button className="btn btn-sm btn-danger" onClick={handleOkClick}>
+              <FaPowerOff className="me-1" />
               Logout
             </button>
             <button
-              className='btn btn-sm btn-outline-primary'
-              onClick={() => setShow(false)}>
+              className="btn btn-sm btn-outline-primary"
+              onClick={() => setShow(false)}
+            >
               Cancel
             </button>
           </div>
         </Modal.Footer>
       </Modal>
-      <div className='d-flex justify-content-center align-items-center'>
+      <div className="d-flex justify-content-center align-items-center">
         <button
-          className='btn d-flex align-items-center text-light'
-          onClick={toggleSidebar}>
+          className="btn d-flex align-items-center text-light"
+          onClick={toggleSidebar}
+        >
           <FaBars size={20} />
         </button>
       </div>
 
-      <div className='d-flex justify-content-center align-items-center flex-grow-1'>
-        <h5 className='text-light align-middle m-0'>
-          Deucha Land Information <span className="d-none d-md-inline">Management System</span>
+      <div className="d-flex justify-content-center align-items-center flex-grow-1">
+        <h5 className="text-light align-middle m-0 text-nowrap">
+          Deucha Land Information
+          <span className="d-none d-md-inline"> Management System</span>
         </h5>
       </div>
       {location.pathname == "/" && (
@@ -77,15 +81,19 @@ const Header = () => {
           <MapHeader />
         </div>
       )}
-      <div className='header__content d-flex justify-content-center align-items-center gap-3'>
-        <div className='h-100 d-flex align-items-center gap-2'>
+      <div className="user_info d-flex justify-content-center align-items-center gap-3">
+        <div className="h-100 d-flex align-items-center gap-2">
           <div
-            className='bg-light border rounded-circle d-flex justify-content-center align-items-center'
-            style={{ width: "30px", height: "30px" }}>
-            <FaUser size={18} color='#001f3d' />
+            className="bg-light border rounded-circle d-flex justify-content-center align-items-center"
+            style={{ width: "30px", height: "30px" }}
+          >
+            <FaUser size={18} color="#001f3d" />
           </div>
           <span>
-            <p className='m-0 d-none lg:d-block' style={{ textTransform: "capitalize" }}>
+            <p
+              className="m-0 d-none d-lg-block"
+              style={{ textTransform: "capitalize" }}
+            >
               {user?.name}
             </p>
           </span>
