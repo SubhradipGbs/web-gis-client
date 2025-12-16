@@ -28,7 +28,7 @@ class FeatureInfoControl extends Control {
   constructor(options) {
     const button = document.createElement("button");
     button.innerHTML = `
-     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <defs>
     <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#4c6ef5;stop-opacity:1" />
@@ -115,165 +115,166 @@ const MapView = () => {
             }
 
             .ol-layerswitcher {
-    position: absolute;
-    top: 1em;
-    left: 1em !important;
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-    padding: 15px;
-    max-height: calc(100% - 2em);
-    overflow-y: auto;
-    width: 300px;
-    font-family: 'Segoe UI', -apple-system, sans-serif;
-    transition: all 0.3s ease;
-}
+                position: absolute;
+                top: 1em;
+                left: 1em !important;
+                background-color: rgba(255, 255, 255, 0.95);
+                border-radius: 12px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+                padding: 15px;
+                max-height: calc(100% - 2em);
+                overflow-y: auto;
+                width: 300px;
+                font-family: 'Segoe UI', -apple-system, sans-serif;
+                transition: all 0.3s ease;
+            }
 
-/* Custom scrollbar */
-.ol-layerswitcher::-webkit-scrollbar {
-    width: 8px;
-}
+              /* Custom scrollbar */
+              .ol-layerswitcher::-webkit-scrollbar {
+                  width: 8px;
+              }
 
-.ol-layerswitcher::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 4px;
-}
+              .ol-layerswitcher::-webkit-scrollbar-track {
+                  background: #f1f5f9;
+                  border-radius: 4px;
+              }
 
-.ol-layerswitcher::-webkit-scrollbar-thumb {
-    background: #94a3b8;
-    border-radius: 4px;
-}
+              .ol-layerswitcher::-webkit-scrollbar-thumb {
+                  background: #94a3b8;
+                  border-radius: 4px;
+              }
 
-.ol-layerswitcher::-webkit-scrollbar-thumb:hover {
-    background: #64748b;
-}
+              .ol-layerswitcher::-webkit-scrollbar-thumb:hover {
+                  background: #64748b;
+              }
 
-/* Group Styling */
-.ol-layerswitcher .group {
-    margin-bottom: 15px;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-}
+              /* Group Styling */
+              .ol-layerswitcher .group {
+                  margin-bottom: 15px;
+                  background: white;
+                  border-radius: 8px;
+                  overflow: hidden;
+              }
 
-/* Group Labels with Gradients and Icons */
-.ol-layerswitcher .group-label {
-    position: relative;
-    padding: 12px 16px 12px 45px; /* Extra padding for icon */
-    margin: 0;
-    font-weight: 600;
-    font-size: 14px;
-    color: white;
-    cursor: pointer;
-    border: none;
-    width: 100%;
-    text-align: left;
-    background-position: 12px center;
-    background-repeat: no-repeat;
-    background-size: 20px 20px;
-}
+              /* Group Labels with Gradients and Icons */
+              .ol-layerswitcher .group-label {
+                  position: relative;
+                  padding: 12px 16px 12px 45px; /* Extra padding for icon */
+                  margin: 0;
+                  font-weight: 600;
+                  font-size: 14px;
+                  color: white;
+                  cursor: pointer;
+                  border: none;
+                  width: 100%;
+                  text-align: left;
+                  background-position: 12px center;
+                  background-repeat: no-repeat;
+                  background-size: 20px 20px;
+              }
+              
 
-/* Specific group backgrounds and icons */
-.ol-layerswitcher .group:nth-child(1) .group-label {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>');
-}
+              /* Specific group backgrounds and icons */
+              .ol-layerswitcher .group:nth-child(1) .group-label {
+                  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>');
+              }
 
-.ol-layerswitcher .group:nth-child(2) .group-label {
-    background: linear-gradient(135deg, #10b981, #047857);
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8-2h4v2h-4V4z"/></svg>');
-}
+              .ol-layerswitcher .group:nth-child(2) .group-label {
+                  background: linear-gradient(135deg, #10b981, #047857);
+                  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8-2h4v2h-4V4z"/></svg>');
+              }
 
-.ol-layerswitcher .group:nth-child(3) .group-label {
-    background: linear-gradient(135deg, #f59e0b, #b45309);
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
-}
+              .ol-layerswitcher .group:nth-child(3) .group-label {
+                  background: linear-gradient(135deg, #f59e0b, #b45309);
+                  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>');
+              }
 
-.ol-layerswitcher .group:nth-child(4) .group-label {
-    background: linear-gradient(135deg, #ec4899, #be185d);
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M14 6l-4.22 5.63 1.25 1.67L14 9.33 19 16h-8.46l-4.01-5.37L1 18h22L14 6zM5 16l1.52-2.03L8.04 16H5z"/></svg>');
-}
+              .ol-layerswitcher .group:nth-child(4) .group-label {
+                  background: linear-gradient(135deg, #ec4899, #be185d);
+                  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M14 6l-4.22 5.63 1.25 1.67L14 9.33 19 16h-8.46l-4.01-5.37L1 18h22L14 6zM5 16l1.52-2.03L8.04 16H5z"/></svg>');
+              }
 
-/* Layer Items */
-.ol-layerswitcher .layerDiv {
-    padding: 10px 16px;
-    margin: 5px;
-    background-color: #f8fafc;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-}
+              /* Layer Items */
+              .ol-layerswitcher .layerDiv {
+                  padding: 10px 16px;
+                  margin: 5px;
+                  background-color: #f8fafc;
+                  border-radius: 6px;
+                  transition: all 0.2s ease;
+                  display: flex;
+                  align-items: center;
+              }
 
-.ol-layerswitcher .layerDiv:hover {
-    background-color: #f1f5f9;
-    transform: translateX(5px);
-}
+              .ol-layerswitcher .layerDiv:hover {
+                  background-color: #f1f5f9;
+                  transform: translateX(5px);
+              }
 
-/* Checkbox styling */
-.ol-layerswitcher .layerDiv input[type="checkbox"] {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid #cbd5e1;
-    border-radius: 4px;
-    margin-right: 10px;
-    cursor: pointer;
-    position: relative;
-    top:0.4em;
-    transition: all 0.2s ease;
-}
-.layer-switcher li input{
-  top:0.4em;
-} 
+              /* Checkbox styling */
+              .ol-layerswitcher .layerDiv input[type="checkbox"] {
+                  appearance: none;
+                  width: 18px;
+                  height: 18px;
+                  border: 2px solid #cbd5e1;
+                  border-radius: 4px;
+                  margin-right: 10px;
+                  cursor: pointer;
+                  position: relative;
+                  top:0.4em;
+                  transition: all 0.2s ease;
+              }
+              .layer-switcher li input{
+                top:0.4em;
+              } 
 
-.ol-layerswitcher .layerDiv input[type="checkbox"]:checked {
-    background-color: #3b82f6;
-    border-color: #2563eb;
-}
+              .ol-layerswitcher .layerDiv input[type="checkbox"]:checked {
+                  background-color: #3b82f6;
+                  border-color: #2563eb;
+              }
 
-.ol-layerswitcher .layerDiv input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    left: 5px;
-    top: 2px;
-    width: 5px;
-    height: 9px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
+              .ol-layerswitcher .layerDiv input[type="checkbox"]:checked::after {
+                  content: '';
+                  position: absolute;
+                  left: 5px;
+                  top: 2px;
+                  width: 5px;
+                  height: 9px;
+                  border: solid white;
+                  border-width: 0 2px 2px 0;
+                  transform: rotate(45deg);
+              }
 
-/* Layer labels */
-.ol-layerswitcher .layerDiv label {
-    color: #1e293b;
-    font-size: 13px;
-    cursor: pointer;
-    flex-grow: 1;
-    margin-left: 8px;
-}
+              /* Layer labels */
+              .ol-layerswitcher .layerDiv label {
+                  color: #1e293b;
+                  font-size: 13px;
+                  cursor: pointer;
+                  flex-grow: 1;
+                  margin-left: 8px;
+              }
 
-/* Hover effects */
-.ol-layerswitcher .layerDiv:hover label {
-    color: #0f172a;
-}
+              /* Hover effects */
+              .ol-layerswitcher .layerDiv:hover label {
+                  color: #0f172a;
+              }
 
-/* Panel header */
-.ol-layerswitcher .panel {
-    padding: 0;
-    margin: 0;
-    border: none;
-}
+              /* Panel header */
+              .ol-layerswitcher .panel {
+                  padding: 0;
+                  margin: 0;
+                  border: none;
+              }
 
-/* Animation for group expansion/collapse */
-.ol-layerswitcher .group {
-    transition: all 0.3s ease;
-}
+              /* Animation for group expansion/collapse */
+              .ol-layerswitcher .group {
+                  transition: all 0.3s ease;
+              }
 
-.ol-layerswitcher .group.ol-layer-hidden {
-    max-height: 45px;
-    overflow: hidden;
-}
+              .ol-layerswitcher .group.ol-layer-hidden {
+                  max-height: 45px;
+                  overflow: hidden;
+              }
 
 
             .layer-panel {
@@ -309,8 +310,8 @@ const MapView = () => {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 40px;
-                height: 40px;
+                width: 70px;
+                height: 70px;
                 transition: all 0.2s ease;
             }
 
@@ -484,7 +485,25 @@ const MapView = () => {
         margin: 1px;
         padding: 0px 2px;
     }
-        `;
+        .ol-control button {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            padding: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .ol-control .feature-info-button {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            margin: 0;
+        }
+`;
     document.head.appendChild(style);
 
     const osmLayer = new TileLayer({

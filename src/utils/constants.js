@@ -81,7 +81,7 @@ export const colorCodes = [
   {
     title: "Fully Purchased",
     color:
-      "repeating-linear-gradient( -45deg, #00FF00, #00FF00 2px, #ffffff 2px, #ffffff 10px )",
+      "repeating-linear-gradient( -45deg, #00FF00, #00FF00 1px, #ffffff 1px, #ffffff 4px )",
     border: "#00FF00",
     class: "border-3",
   },
@@ -91,7 +91,7 @@ export const colorCodes = [
   { title: "Other's Land", color: "#E8F4F8", border: "#2C5F7D", class: "border-3" },
   { title: "Vested Land", color: "rgba(123, 104, 238, 1)", border: "rgba(255, 107, 53, 0.95)", class: "border-3" },
   { title: "Rayati Land", color: "#9dbdff", border: "#000000", class: "border-3" },
-  { title: "Land records", color: "lightgray", border: "#000000", class: "border-3" },
+  // { title: "Land records", color: "lightgray", border: "#000000", class: "border-3" },
 ];
 
 // background-color: #e5e5f7;

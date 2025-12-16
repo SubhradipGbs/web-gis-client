@@ -17,7 +17,7 @@ const Dashboard = () => {
   return (
     <div className='w-100 h-100 offcanvas-parent' ref={parentRef}>
       <div className={`custom-offcanvas ${drawerOpen ? "open" : ""}`}>
-        <div className='offcanva-body d-flex flex-wrap justify-content-start align-items-center px-2'>
+        <div className='offcanva-body d-flex flex-wrap justify-content-start align-items-center px-2 pb-3'>
           {colorCodes.map((item) => (
             <div className='info-box'>
               <div
