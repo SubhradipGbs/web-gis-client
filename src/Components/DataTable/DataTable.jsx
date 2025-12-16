@@ -455,7 +455,7 @@ const DataTable = ({
                         style={{ backgroundColor: "#9DC08B" }}
                       ></td>
                       <td
-                        colSpan={8}
+                        colSpan={9}
                         style={{ backgroundColor: "#9DC08B" }}
                       ></td>
                       <td colSpan={1} style={{ backgroundColor: "#9DC08B" }}>

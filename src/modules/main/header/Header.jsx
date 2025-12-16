@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../../../store/reducers/auth";
@@ -7,14 +7,13 @@ import MapHeader from "../../../Components/MapHeader/MapHeader";
 import { useLocation } from "react-router-dom";
 import { toggleSideNav } from "../../../store/reducers/ui";
 import { FaPowerOff } from "react-icons/fa6";
-import { Modal } from "react-bootstrap";
+import { Dropdown, Modal } from "react-bootstrap";
 
 const Header = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const logout = async () => {
-    dispatch(userLogout());
-  };
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const toggleSidebar = () => {
     dispatch(toggleSideNav());
   };
@@ -26,9 +25,22 @@ const Header = () => {
   };
   const [show, setShow] = useState(false);
 
-  const openLogout = () => {
-    setShow(true);
-  };
+  // const openLogout = () => {
+  //   setShow(true);
+  // };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="header">
@@ -81,11 +93,17 @@ const Header = () => {
           <MapHeader />
         </div>
       )}
-      <div className="user_info d-flex justify-content-center align-items-center gap-3">
+      <div
+        className="user_info d-none d-md-flex justify-content-center align-items-center gap-3"
+        ref={dropdownRef}
+      >
         <div className="h-100 d-flex align-items-center gap-2">
           <div
             className="bg-light border rounded-circle d-flex justify-content-center align-items-center"
-            style={{ width: "30px", height: "30px" }}
+            style={{ width: "30px", height: "30px", cursor: "pointer" }}
+            onClick={() => {
+              setOpen(!open);
+            }}
           >
             <FaUser size={18} color="#001f3d" />
           </div>
@@ -97,6 +115,36 @@ const Header = () => {
               {user?.name}
             </p>
           </span>
+          <div>
+            {open && (
+              <ul
+                className="dropdown-menu dropdown-menu-end show mt-2"
+                style={{ position: "absolute", right: "50px", top: "48px" }}
+              >
+                {/* <li>
+                  <a className="dropdown-item" href="/profile">
+                    Profile
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="/settings">
+                    Settings
+                  </a>
+                </li>
+                <li>
+                  <hr className="dropdown-divider" />
+                </li> */}
+                <li>
+                  <button
+                    className="dropdown-item text-danger"
+                    onClick={() => setShow(true)}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            )}
+          </div>
         </div>
         {/* <button
           className='btn btn-sm btn-danger d-flex align-items-center gap-1 rounded-circle p-1'

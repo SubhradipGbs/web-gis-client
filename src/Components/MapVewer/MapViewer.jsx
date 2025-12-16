@@ -1301,9 +1301,9 @@ const MapView = () => {
         // },
       ].filter((layerInfo) => layerInfo.condition);
 
-      const fetchLayerFeatureInfo = (layerInfo) => {
+      const fetchLayerFeatureInfo = async (layerInfo) => {
         const wmsSource = layerInfo.layer.getSource();
-        const url = wmsSource.getFeatureInfoUrl(
+        const url = await wmsSource.getFeatureInfoUrl(
           clickedCoordinate,
           resolution,
           projection,
