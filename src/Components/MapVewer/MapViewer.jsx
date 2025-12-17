@@ -1099,7 +1099,7 @@ const MapView = () => {
         wmsLayer,
         BasaltGroup,
         CoalGroup,
-        landGroup, // Add your drone image layer here
+        // landGroup,
       ],
       view: new View({
         center: fromLonLat([87.598285, 24.059653]),
