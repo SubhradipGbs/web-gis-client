@@ -86,11 +86,12 @@ export const colorCodes = [
     class: "border-3",
   },
 
-  { title: "Partly Purchased", color: "#FFC0CB", border: "#640064", class:"border-3" },
+  { title: "Partly Purchased Coal", color: "rgba(96, 130, 182, 0.5)", border: "red", class:"border-3" },
+  { title: "Partly Purchased Basalt", color: "#FFC0CB", border: "#640064", class:"border-3" },
   { title: "Forest Land", color: "rgba(34, 139, 34, 0.7)", border: "#006400", class: "border-3" },
-  { title: "Other's Land", color: "#E8F4F8", border: "#2C5F7D", class: "border-3" },
-  { title: "Vested Land", color: "rgba(123, 104, 238, 1)", border: "rgba(255, 107, 53, 0.95)", class: "border-3" },
-  { title: "Rayati Land", color: "#9dbdff", border: "#000000", class: "border-3" },
+  // { title: "Other's Land", color: "#E8F4F8", border: "#2C5F7D", class: "border-3" },
+  { title: "Vested Land", color: "rgba(255, 215, 0, 0.6)", border: "#B8860B", class: "border-3" },
+  { title: "Rayati Land", color: "rgba(74, 144, 226, 0.35)", border: "rgba(255, 215, 0, 0.95)", class: "border-3" },
   // { title: "Land records", color: "lightgray", border: "#000000", class: "border-3" },
 ];
 

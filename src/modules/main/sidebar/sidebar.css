@@ -69,7 +69,6 @@
   font-weight: 500;
   vertical-align: middle;
   transition: all 0.3s;
-  text-transform: capitalize;
 }
 
 .settings-menu-item:where(.active) {

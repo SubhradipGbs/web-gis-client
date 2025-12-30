@@ -1049,13 +1049,13 @@ const MapView = () => {
       title: "Land Categories",
       layers: [
         // notapprove,
-        rayatiLand,
-        vestedLand,
+        // rayatiLand,
+        // vestedLand,
         forestLand,
         otherLand,
-        partlypurchasedLand,
-        fullypurchasedLand,
-        vw_borehole,
+        // partlypurchasedLand,
+        // fullypurchasedLand,
+        // vw_borehole,
       ],
     });
 
@@ -1099,7 +1099,7 @@ const MapView = () => {
         wmsLayer,
         BasaltGroup,
         CoalGroup,
-        // landGroup,
+        landGroup,
       ],
       view: new View({
         center: fromLonLat([87.598285, 24.059653]),

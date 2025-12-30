@@ -110,7 +110,6 @@ const Header = () => {
           <span>
             <p
               className="m-0 d-none d-lg-block"
-              style={{ textTransform: "capitalize" }}
             >
               {user?.name}
             </p>
