@@ -914,7 +914,7 @@ const MapView = () => {
       }),
       crossOrigin: "anonymous",
       opacity: 1,
-      visible: false,
+      visible: true,
     });
 
     const mouzaWMS = new TileLayer({
@@ -1380,6 +1380,27 @@ const MapView = () => {
   };
 
   const formatFieldName = (fieldName) => {
+    if (fieldName == "plotno") {
+      return "Plot No";
+    }
+    if (fieldName == "lr_plot_no") {
+      return "LR Plot No";
+    }
+    if (fieldName == "rs_plot_no") {
+      return "RS Plot No";
+    }
+    if (fieldName == "lr_khatian_no") {
+      return "Khatian No";
+    }
+    if (fieldName == "purch_area") {
+      return "Purchase Area";
+    }
+    if (fieldName == "distance_from_nh_meters") {
+      return "Distance from NH (Meters)";
+    }
+    if (fieldName == "distance_from_metalled_road_meters") {
+      return "Distance from Metalled Road (Meters)";
+    }
     return fieldName
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -1567,22 +1588,33 @@ const MapView = () => {
                 </thead>
                 <tbody>
                   {Object.entries(featuresData[selectedFeatureIndex]).map(
-                    ([key, value]) => (
-                      <tr key={key} style={{ borderBottom: "1px solid #eee" }}>
-                        <td
-                          style={{
-                            fontWeight: "500",
-                            padding: "8px 10px",
-                            color: "#333",
-                          }}
+                    ([key, value]) => {
+                      if (value === null || value === undefined || value === "") {
+                        value = "N/A";
+                      }
+                      if( key === 'total_area' || key=== 'in_coal' || key=== 'in_basalt'){
+                        return null;
+                      }
+                      return (
+                        <tr
+                          key={key}
+                          style={{ borderBottom: "1px solid #eee" }}
                         >
-                          {formatFieldName(key)}
-                        </td>
-                        <td style={{ padding: "8px 10px", color: "#333" }}>
-                          {value}
-                        </td>
-                      </tr>
-                    )
+                          <td
+                            style={{
+                              fontWeight: "500",
+                              padding: "8px 10px",
+                              color: "#333",
+                            }}
+                          >
+                            {formatFieldName(key)}
+                          </td>
+                          <td style={{ padding: "8px 10px", color: "#333" }}>
+                            {value}
+                          </td>
+                        </tr>
+                      );
+                    }
                   )}
                 </tbody>
               </table>

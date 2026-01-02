@@ -47,3 +47,53 @@ button[disabled] {
   height: 30px !important;
   padding: 0px !important;
 }
+
+.search-form-container{
+  margin-top: 2rem;
+}
+
+
+.search-land-page {
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Title */
+.page-title {
+  padding: 0.5rem 1rem;
+}
+
+/* Form section auto height */
+.form-section {
+  padding: 0 1rem;
+}
+
+/* Result section fills remaining space */
+.result-section {
+  flex: 1;
+  padding: 0 1rem 1rem;
+}
+
+/* Scrollable table */
+.table-wrapper {
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+  border: 1px solid #dee2e6;
+}
+
+/* Sticky header */
+.table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+
+/* Map full height */
+.map-wrapper {
+  height: 100%;
+  border: 1px solid #dee2e6;
+}

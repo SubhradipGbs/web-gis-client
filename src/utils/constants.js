@@ -51,6 +51,11 @@ export const demoMenu = [
       //   path: "/reports/user",
       // },
       {
+        id: 4,
+        name: "Search Lands",
+        path: "/reports/search-land",
+      },
+      {
         id: 2,
         name: "Land Records",
         path: "/reports/land",
@@ -75,8 +80,18 @@ export const colorCodes = [
   //   color: "#ffffff",
   //   border: "#F3B1A6",
   // },
-  { title: "Basalt Boundary", color: "#ffffff", border: "#6FFF54" , class: "border-3"},
-  { title: "Coal Boundary", color: "#FFFFFF", border: "#FF0000", class: "border-3" },
+  {
+    title: "Basalt Boundary",
+    color: "#ffffff",
+    border: "#6FFF54",
+    class: "border-3",
+  },
+  {
+    title: "Coal Boundary",
+    color: "#FFFFFF",
+    border: "#FF0000",
+    class: "border-3",
+  },
   { title: "Borehole", color: "#40ff00", border: "#00b29d", class: "round" },
   {
     title: "Fully Purchased",
@@ -86,12 +101,37 @@ export const colorCodes = [
     class: "border-3",
   },
 
-  { title: "Partly Purchased Coal", color: "rgba(96, 130, 182, 0.5)", border: "red", class:"border-3" },
-  { title: "Partly Purchased Basalt", color: "#FFC0CB", border: "#640064", class:"border-3" },
-  { title: "Forest Land", color: "rgba(34, 139, 34, 0.7)", border: "#006400", class: "border-3" },
+  {
+    title: "Partly Purchased Coal",
+    color: "rgba(96, 130, 182, 0.5)",
+    border: "red",
+    class: "border-3",
+  },
+  {
+    title: "Partly Purchased Basalt",
+    color: "#FFC0CB",
+    border: "#640064",
+    class: "border-3",
+  },
+  {
+    title: "Forest Land",
+    color: "rgba(34, 139, 34, 0.7)",
+    border: "#006400",
+    class: "border-3",
+  },
   // { title: "Other's Land", color: "#E8F4F8", border: "#2C5F7D", class: "border-3" },
-  { title: "Vested Land", color: "rgba(255, 215, 0, 0.6)", border: "#B8860B", class: "border-3" },
-  { title: "Rayati Land", color: "rgba(74, 144, 226, 0.35)", border: "rgba(255, 215, 0, 0.95)", class: "border-3" },
+  {
+    title: "Vested Land",
+    color: "rgba(255, 215, 0, 0.6)",
+    border: "#B8860B",
+    class: "border-3",
+  },
+  {
+    title: "Rayati Land",
+    color: "rgba(74, 144, 226, 0.35)",
+    border: "rgba(255, 215, 0, 0.95)",
+    class: "border-3",
+  },
   // { title: "Land records", color: "lightgray", border: "#000000", class: "border-3" },
 ];
 
@@ -106,3 +146,19 @@ export const colorCodes = [
 //         background-size: 1em 1em;
 //         background-color: #ffffff;
 //         opacity: 1
+
+export const districts = [
+  {
+    id: 1,
+    code: 307,
+    name: "Birbhum",
+  },
+];
+export const blocks = [
+  {
+    id: 1,
+    code: 2257,
+    distId: 307,
+    name: "Mohammad Bazar",
+  },
+];

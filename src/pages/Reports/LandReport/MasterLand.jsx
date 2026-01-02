@@ -386,7 +386,9 @@ const MasterLand = () => {
         width: "100%",
       }}
     >
-      <h5>Master Land Records:</h5>
+      <div className="w-100 d-flex justify-content-between">
+        <h5>Master Land Records:</h5>
+      </div>
       <div>
         <Modal show={show} onHide={handleClose} centered size="lg" scrollable>
           <Modal.Header
