@@ -27,20 +27,26 @@ import { createStringXY } from "ol/coordinate";
 class FeatureInfoControl extends Control {
   constructor(options) {
     const button = document.createElement("button");
-    button.innerHTML = `
-     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#4c6ef5;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0d6efd;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  <circle cx="12" cy="12" r="10" stroke="url(#grad1)" stroke-width="2" fill="none" />
-  <line x1="12" y1="16" x2="12" y2="12" stroke="url(#grad1)" stroke-width="2"/>
-  <line x1="12" y1="8" x2="12.01" y2="8" stroke="url(#grad1)" stroke-width="2"/>
-  <circle cx="12" cy="12" r="2" fill="white" />
+    //     button.innerHTML = `
+    //      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    //   <defs>
+    //     <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+    //       <stop offset="0%" style="stop-color:#4c6ef5;stop-opacity:1" />
+    //       <stop offset="100%" style="stop-color:#0d6efd;stop-opacity:1" />
+    //     </linearGradient>
+    //   </defs>
+    //   <circle cx="12" cy="12" r="10" stroke="url(#grad1)" stroke-width="2" fill="none" />
+    //   <line x1="12" y1="16" x2="12" y2="12" stroke="url(#grad1)" stroke-width="2"/>
+    //   <line x1="12" y1="8" x2="12.01" y2="8" stroke="url(#grad1)" stroke-width="2"/>
+    //   <circle cx="12" cy="12" r="2" fill="white" />
+    // </svg>
+    //     `;
+    button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+  <rect x="10.5" y="9" width="3" height="8"/>
+  <rect x="9" y="17" width="6" height="2"/>
+  <circle cx="12" cy="6" r="1.5"/>
 </svg>
-    `;
+`;
     button.className = "feature-info-button";
 
     const element = document.createElement("div");
@@ -62,12 +68,14 @@ const MapView = () => {
   const mapElement = useRef(null);
   const urlGeoServer = `${import.meta.env.VITE_GEOSERVER_URL}/wms`;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [featuresData, setFeaturesData] = useState([]);
+  const [layerResults, setLayerResults] = useState([]);
+
+  const [activeLayerIndex, setActiveLayerIndex] = useState(0);
+
   const [coordinates, setCoordinates] = useState(null);
   const [isFeatureInfoActive, setIsFeatureInfoActive] = useState(false);
   const mapRef = useRef(null);
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(0);
-  const [currentFeatureLayer, setCurrentFeatureLayer] = useState("");
   const [droneImgLoading, setDroneImgLoading] = useState(true);
 
   useEffect(() => {
@@ -301,9 +309,7 @@ const MapView = () => {
             }
 
             .feature-info-button {
-                background-color: white;
                 border: 1px solid #e2e8f0;
-                border-radius: 8px;
                 cursor: pointer;
                 padding: 8px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -312,7 +318,9 @@ const MapView = () => {
                 justify-content: center;
                 width: 70px;
                 height: 70px;
+                border-radius: 36px !important;
                 transition: all 0.2s ease;
+                color: #3b82f6;
             }
 
             .feature-info-button:hover {
@@ -914,7 +922,7 @@ const MapView = () => {
       }),
       crossOrigin: "anonymous",
       opacity: 1,
-      visible: true,
+      visible: false,
     });
 
     const mouzaWMS = new TileLayer({
@@ -1340,10 +1348,8 @@ const MapView = () => {
         // Filter out null results and find the first layer with features
         const validResults = results.filter((result) => result !== null);
         if (validResults.length > 0) {
-          const firstResult = validResults[0];
-          setCoordinates(clickedCoordinate);
-          setFeaturesData(firstResult.features);
-          setCurrentFeatureLayer(firstResult.layerName);
+          setLayerResults(validResults);
+          setActiveLayerIndex(0);
           setSelectedFeatureIndex(0);
           setIsModalOpen(true);
         }
@@ -1375,7 +1381,8 @@ const MapView = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setFeaturesData([]);
+    setLayerResults([]);
+    setActiveLayerIndex(0);
     setSelectedFeatureIndex(0);
   };
 
@@ -1428,7 +1435,7 @@ const MapView = () => {
         contentLabel="Plot Information"
         style={{
           overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.3)", // Softer overlay for a modern look
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
           },
           content: {
             top: "50%",
@@ -1445,7 +1452,7 @@ const MapView = () => {
             boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)",
             maxWidth: "800px",
             width: "90%",
-            backgroundColor: "#fff", // White background for content
+            backgroundColor: "#fff",
           },
         }}
       >
@@ -1466,9 +1473,9 @@ const MapView = () => {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
                 <path d="M12 2C8.13 2 5 5.13 5 9C5 13.53 12 21 12 21C12 21 19 13.53 19 9C19 5.13 15.87 2 12 2Z" />
                 <circle cx="12" cy="9" r="2" fill="#007bff" />
@@ -1489,141 +1496,143 @@ const MapView = () => {
               View and navigate through the plot records
             </p>
           </div>
-        </div>
-
-        {featuresData.length > 0 ? (
-          <>
-            <div
-              className="feature-records-nav"
+          <div className="modal-header-close " style={{ marginLeft: "auto" }}>
+            <button
+              onClick={closeModal}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "20px",
+                background: "transparent",
+                border: "none",
+                fontSize: "1.5rem",
+                cursor: "pointer",
+                color: "white",
               }}
             >
-              <span
-                className="feature-records-count"
-                style={{ fontSize: "0.9rem", color: "#555" }}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
               >
-                Record {selectedFeatureIndex + 1} of {featuresData.length}
+                <line
+                  x1="6"
+                  y1="6"
+                  x2="18"
+                  y2="18"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="18"
+                  y1="6"
+                  x2="6"
+                  y2="18"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {layerResults.length > 0 ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                marginBottom: "16px",
+                flexWrap: "wrap",
+              }}
+            >
+              {layerResults.map((layer, idx) => (
+                <button
+                  key={idx + Math.random() * 1000}
+                  onClick={() => {
+                    setActiveLayerIndex(idx);
+                    setSelectedFeatureIndex(0);
+                  }}
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: "6px",
+                    border: "none",
+                    cursor: "pointer",
+                    backgroundColor:
+                      idx === activeLayerIndex ? "#2563eb" : "#e5e7eb",
+                    color: idx === activeLayerIndex ? "#fff" : "#111",
+                    fontWeight: 500,
+                  }}
+                >
+                  {layer.layerName} ({layer.features.length})
+                </button>
+              ))}
+            </div>
+            <div className="w-100 d-flex justify-content-between align-items-center mb-3">
+              <span>
+                Record {selectedFeatureIndex + 1} of{" "}
+                {layerResults[activeLayerIndex].features.length}
               </span>
-              <div>
+
+              <div className="d-flex align-items-center gap-2">
                 <button
                   className="pagination-button"
                   onClick={() =>
                     setSelectedFeatureIndex((prev) => Math.max(0, prev - 1))
                   }
                   disabled={selectedFeatureIndex === 0}
-                  style={{
-                    backgroundColor: "#007bff",
-                    color: "#fff",
-                    border: "none",
-                    padding: "8px 16px",
-                    borderRadius: "5px",
-                    fontSize: "0.9rem",
-                    cursor:
-                      selectedFeatureIndex === 0 ? "not-allowed" : "pointer",
-                    marginRight: "8px",
-                  }}
                 >
                   Previous
                 </button>
+
                 <button
                   className="pagination-button"
                   onClick={() =>
                     setSelectedFeatureIndex((prev) =>
-                      Math.min(featuresData.length - 1, prev + 1)
+                      Math.min(
+                        layerResults[activeLayerIndex].features.length - 1,
+                        prev + 1
+                      )
                     )
                   }
-                  disabled={selectedFeatureIndex === featuresData.length - 1}
-                  style={{
-                    backgroundColor: "#007bff",
-                    color: "#fff",
-                    border: "none",
-                    padding: "8px 16px",
-                    borderRadius: "5px",
-                    fontSize: "0.9rem",
-                    cursor:
-                      selectedFeatureIndex === featuresData.length - 1
-                        ? "not-allowed"
-                        : "pointer",
-                  }}
+                  disabled={
+                    selectedFeatureIndex ===
+                    layerResults[activeLayerIndex].features.length - 1
+                  }
                 >
                   Next
                 </button>
               </div>
             </div>
 
-            <div style={{ overflowX: "auto" }}>
-              <table
-                className="records-table"
-                style={{ width: "100%", borderCollapse: "collapse" }}
-              >
-                <thead>
-                  <tr>
-                    <th
-                      style={{
-                        textAlign: "left",
-                        padding: "10px",
-                        color: "#007bff",
-                        fontSize: "1rem",
-                        fontWeight: "600",
-                      }}
-                    >
-                      Field
-                    </th>
-                    <th
-                      style={{
-                        textAlign: "left",
-                        padding: "10px",
-                        color: "#007bff",
-                        fontSize: "1rem",
-                        fontWeight: "600",
-                      }}
-                    >
-                      Value
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(featuresData[selectedFeatureIndex]).map(
-                    ([key, value]) => {
-                      if (value === null || value === undefined || value === "") {
-                        value = "N/A";
-                      }
-                      if( key === 'total_area' || key=== 'in_coal' || key=== 'in_basalt'){
-                        return null;
-                      }
-                      return (
-                        <tr
-                          key={key}
-                          style={{ borderBottom: "1px solid #eee" }}
-                        >
-                          <td
-                            style={{
-                              fontWeight: "500",
-                              padding: "8px 10px",
-                              color: "#333",
-                            }}
-                          >
-                            {formatFieldName(key)}
-                          </td>
-                          <td style={{ padding: "8px 10px", color: "#333" }}>
-                            {value}
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <table className="records-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(
+                  layerResults[activeLayerIndex].features[selectedFeatureIndex]
+                ).map(([key, value]) => {
+                  if (!value) value = "N/A";
+                  if (["total_area", "in_coal", "in_basalt"].includes(key))
+                    return null;
+
+                  return (
+                    <tr key={key + Math.random() * 1000}>
+                      <td>{formatFieldName(key)}</td>
+                      <td>{value}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </>
         ) : (
-          <p style={{ color: "#777", textAlign: "center" }}>
-            No data available for this location.
-          </p>
+          <p>No data available.</p>
         )}
 
         <button

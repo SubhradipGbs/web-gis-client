@@ -3,7 +3,7 @@ import { blocks, districts } from "../../../utils/constants";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import apiClient from "../../../utils/apiClient";
 import LandMap from "../../../Components/MapVewer/LandMap";
-import './landreport.css';
+import "./landreport.css";
 
 const SearchLand = () => {
   const [district, setDistrict] = useState("");
@@ -93,10 +93,14 @@ const SearchLand = () => {
           <div className="card-body">
             <div className="row">
               {/* LEFT */}
-              <div className="col-md-6 border-end">
-                <div className="mb-3">
+              <div className="col-md-6 border-end row">
+                <div className="col-12 col-md-6 mb-3 mb-md-0">
                   <label className="form-label fw-bold">District *</label>
-                  <select className="form-select" onChange={selectDist}>
+                  <select
+                    className="form-select"
+                    style={{ maxWidth: "100%" }}
+                    onChange={selectDist}
+                  >
                     <option value="">---Selection---</option>
                     {districts.map((dist) => (
                       <option key={dist.id} value={dist.code}>
@@ -106,10 +110,11 @@ const SearchLand = () => {
                   </select>
                 </div>
 
-                <div className="mb-3">
+                <div className="col-12 col-md-6 mb-3 mb-md-0">
                   <label className="form-label fw-bold">Block *</label>
                   <select
                     className="form-select"
+                    style={{ maxWidth: "100%" }}
                     disabled={!district}
                     onChange={selectBlock}
                   >
@@ -122,10 +127,11 @@ const SearchLand = () => {
                   </select>
                 </div>
 
-                <div className="mb-3">
+                <div className="col-12 col-md-6 mb-3 mb-md-0">
                   <label className="form-label fw-bold">Mouza *</label>
                   <select
                     className="form-select"
+                    style={{ maxWidth: "100%" }}
                     disabled={!block}
                     onChange={selectMouza}
                   >
@@ -141,7 +147,7 @@ const SearchLand = () => {
               </div>
 
               {/* RIGHT */}
-              <div className="col-md-6">
+              <div className="col-md-6 ps-4">
                 <div className="mb-3">
                   <div className="form-check">
                     <input
@@ -185,7 +191,7 @@ const SearchLand = () => {
                     <label className="form-label fw-bold">Plot No *</label>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control form-control-sm"
                       disabled={!mouza}
                       onChange={(e) => setplot(e.target.value)}
                     />
@@ -206,10 +212,10 @@ const SearchLand = () => {
         </div>
       </div>
 
-      <div className="result-section">
+      <div className="result-section mt-2">
         <div className="row h-100 g-2">
           <div className="col-12 col-md-6 h-100 order-2 order-md-1">
-            <div className="table-wrapper">
+            <div className="table-wrapper pb-5">
               <table className="table table-sm">
                 <thead>
                   <tr>

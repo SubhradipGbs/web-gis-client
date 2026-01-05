@@ -60,31 +60,26 @@ button[disabled] {
   overflow: hidden;
 }
 
-/* Title */
 .page-title {
   padding: 0.5rem 1rem;
 }
 
-/* Form section auto height */
 .form-section {
   padding: 0 1rem;
 }
 
-/* Result section fills remaining space */
 .result-section {
   flex: 1;
   padding: 0 1rem 1rem;
 }
 
-/* Scrollable table */
 .table-wrapper {
-  height: 100%;
+  max-height: calc(100vh - 360px);
   overflow: hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
   border: 1px solid #dee2e6;
 }
 
-/* Sticky header */
 .table-wrapper thead th {
   position: sticky;
   top: 0;
@@ -92,8 +87,36 @@ button[disabled] {
   z-index: 1;
 }
 
-/* Map full height */
 .map-wrapper {
   height: 100%;
   border: 1px solid #dee2e6;
+}
+
+.form-section .form-control{
+  width: 50%;
+}
+
+
+@media only screen and (max-width: 768px) {
+  .search-land-page {
+    height: auto;
+  }
+
+  .form-section,
+  .result-section {
+    padding: 1rem;
+  }
+
+  .table-wrapper {
+    height: auto;
+  }
+
+  .map-wrapper {
+    height: 300px;
+    margin-top: 1rem;
+  }
+
+  .form-section .form-control{
+    width: 100%;
+  }
 }

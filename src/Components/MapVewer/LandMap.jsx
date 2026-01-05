@@ -79,7 +79,7 @@ const LandMap = ({ land }) => {
     const extent = vectorSource.getExtent();
     mapInstance.current.getView().fit(extent, {
       padding: [40, 40, 40, 40],
-      maxZoom: 19,
+      maxZoom: 20,
       duration: 600,
     });
   }, [land]);
