@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { blocks, districts } from "../../../utils/constants";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../../../utils/apiClient";
 import LandMap from "../../../Components/MapVewer/LandMap";
 import "./landreport.css";
@@ -15,6 +15,8 @@ const SearchLand = () => {
   const [landRecords, setLandRecords] = useState([]);
   const [selectedLand, setSelectedLand] = useState(null);
   const [searchOption, setSearchOption] = useState("khatian");
+
+  const queryClient = useQueryClient();
 
   const selectDist = (e) => {
     const distCode = e.target.value;
@@ -60,13 +62,14 @@ const SearchLand = () => {
     enabled: false,
   });
 
-  const { mutate, isPending } = useMutation({
+  const {data:lands, mutate, isPending } = useMutation({
     mutationFn: getlandInfo,
     onSuccess: (res) => {
-      setLandRecords(res.data.data || []);
-      setSelectedLand(null);
+      queryClient.invalidateQueries({ queryKey: ["lands"] });
     },
   });
+
+  console.log("lands", lands);
 
   const viewLandInfo = () => {
     if (!mouza) return;
@@ -216,7 +219,7 @@ const SearchLand = () => {
         <div className="row h-100 g-2">
           <div className="col-12 col-md-6 h-100 order-2 order-md-1">
             <div className="table-wrapper pb-5">
-              <table className="table table-sm">
+              <table className="table table-sm align-middle table-bordered">
                 <thead>
                   <tr>
                     <th>Sl</th>
@@ -224,18 +227,18 @@ const SearchLand = () => {
                     <th>Khatian</th>
                     <th>Owner</th>
                     <th>Area</th>
-                    <th>Action</th>
+                    <th className="text-center" style={{width:'120px'}}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {landRecords.map((land, i) => (
+                  {lands?.data && lands.data.data.map((land, i) => (
                     <tr key={land.plot_id}>
                       <td>{i + 1}</td>
                       <td>{land.plotno}</td>
                       <td>{land.lr_khatian_no}</td>
                       <td>{land.owner_name_or_raiayat}</td>
                       <td>{land.area_owned_in_acres}</td>
-                      <td>
+                      <td className="text-center">
                         <button
                           className="btn btn-sm btn-primary"
                           onClick={() => setSelectedLand(land)}
